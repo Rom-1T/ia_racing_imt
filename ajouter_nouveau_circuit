@@ -1,0 +1,8 @@
+AJOUTER UN CIRCUIT :
+
+1-Dans /gym-donkeycar/gym_donkeycar/envs/donkey_env.py :
+Ajouter une nouvelle classe. Il faut le nom du circuit tel qu'il est dans le simulateur.
+2-Dans /gym-donkeycar/gym_donkeycar/__init__.py :
+Ajouter un register qui pointe vers l'environement créé plus tôt.
+3-Dans /rl-baselines3-zoo/hyperparams/tqc.yml :
+Il faut ajouter le nom de l'environement.

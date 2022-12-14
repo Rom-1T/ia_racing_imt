@@ -2,12 +2,7 @@
 donkey-generated-track-v0:
   # Normalize AE (+ the rest)
   # TODO: try normalizing reward too
-#  normalize: "{'norm_obs': True, 'norm_reward': False}"
-#  env_wrapper:
-#    - gym.wrappers.time_limit.TimeLimit:
-#        max_episode_steps: 10000
-#    - utils.wrappers.HistoryWrapper:
-#        horizon: 2
+  normalize: "{'norm_obs': True, 'norm_reward': False}"
     # - utils.wrappers.ResidualExpertWrapper:
     #     model_path: ./logs/human/donkey-generated-track-v0_2/policy.pt
     #     d3rlpy_model: True
@@ -17,13 +12,30 @@ donkey-generated-track-v0:
     #    test_mode: False
     # - stable_baselines3.common.monitor.Monitor:
     #     filename: None
+  env_wrapper:
+#    - vec_env_wrapper:
+#        - utils.wrappers.VecForceResetWrapper
+#    - gym.wrappers.time_limit.TimeLimit:
+#          max_episode_steps: 10000
+#    - utils.wrappers.HistoryWrapper:
+#          horizon: 2
+    - utils.wrappers.PreProcessingWrapper:
+        crop_ratio: 70
+        filter_type: "laplacian"
+        min_luminosity_value: 195
+        max_luminosity_value: 200
+        alpha: 0.15
+        beta: 0.9
+        log_activated: False
+        normalize : True
+#    - utils.wrappers.ActionSmoothingWrapper:
+#        smoothing_coef: 0.5
   callback:
     - utils.callbacks.ParallelTrainCallback:
         gradient_steps: 200
-  # vec_env_wrapper:
-  #   - utils.wrappers.VecForceResetWrapper
+
   n_timesteps: !!float 2e6
-  policy: 'CnnPolicy'
+  policy: 'MlpPolicy'
   learning_rate: !!float 7.3e-4
   #learning_rate: !!float 3e-4
   buffer_size: 10000

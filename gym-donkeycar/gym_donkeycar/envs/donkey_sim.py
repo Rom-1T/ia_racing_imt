@@ -94,8 +94,8 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.timer = FPSTimer()
 
         # sensor size - height, width, depth
-        self.camera_img_size = conf["cam_resolution"]
-        self.image_array = np.zeros(self.camera_img_size)
+        self.camera_img_size = conf["cam_resolution"] # A MODIF
+        self.image_array = np.zeros(self.camera_img_size) # A MODIF
         self.image_array_b = None
         self.last_obs = self.image_array
         self.time_received = time.time()

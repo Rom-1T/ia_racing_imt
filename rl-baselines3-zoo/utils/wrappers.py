@@ -1,4 +1,5 @@
 import os
+import random
 from copy import deepcopy
 from typing import Optional
 
@@ -9,6 +10,9 @@ from sb3_contrib.common.wrappers import TimeFeatureWrapper  # noqa: F401 (backwa
 from scipy.signal import iirfilter, sosfilt, zpk2sos
 from stable_baselines3 import SAC
 from stable_baselines3.common.vec_env.base_vec_env import VecEnv, VecEnvObs, VecEnvStepReturn, VecEnvWrapper
+import cv2
+import time
+import matplotlib.pyplot as plt
 
 
 class VecForceResetWrapper(VecEnvWrapper):
@@ -270,7 +274,7 @@ class HistoryWrapper(gym.Wrapper):
         self.obs_history[...] = 0
         self.action_history[...] = 0
         obs = self.env.reset()
-        self.obs_history[..., -obs.shape[-1] :] = obs
+        self.obs_history[..., -obs.shape[-1]:] = obs
         return self._create_obs_from_history()
 
     def step(self, action):
@@ -278,10 +282,10 @@ class HistoryWrapper(gym.Wrapper):
         last_ax_size = obs.shape[-1]
 
         self.obs_history = np.roll(self.obs_history, shift=-last_ax_size, axis=-1)
-        self.obs_history[..., -obs.shape[-1] :] = obs
+        self.obs_history[..., -obs.shape[-1]:] = obs
 
         self.action_history = np.roll(self.action_history, shift=-action.shape[-1], axis=-1)
-        self.action_history[..., -action.shape[-1] :] = action
+        self.action_history[..., -action.shape[-1]:] = action
         return self._create_obs_from_history(), reward, done, info
 
 
@@ -330,7 +334,7 @@ class HistoryWrapperObsDict(gym.Wrapper):
         self.action_history[...] = 0
         obs_dict = self.env.reset()
         obs = obs_dict["observation"]
-        self.obs_history[..., -obs.shape[-1] :] = obs
+        self.obs_history[..., -obs.shape[-1]:] = obs
 
         obs_dict["observation"] = self._create_obs_from_history()
 
@@ -342,10 +346,10 @@ class HistoryWrapperObsDict(gym.Wrapper):
         last_ax_size = obs.shape[-1]
 
         self.obs_history = np.roll(self.obs_history, shift=-last_ax_size, axis=-1)
-        self.obs_history[..., -obs.shape[-1] :] = obs
+        self.obs_history[..., -obs.shape[-1]:] = obs
 
         self.action_history = np.roll(self.action_history, shift=-action.shape[-1], axis=-1)
-        self.action_history[..., -action.shape[-1] :] = action
+        self.action_history[..., -action.shape[-1]:] = action
 
         obs_dict["observation"] = self._create_obs_from_history()
 
@@ -361,13 +365,13 @@ class ResidualExpertWrapper(gym.Wrapper):
     """
 
     def __init__(
-        self,
-        env: gym.Env,
-        model_path: Optional[str] = os.environ.get("MODEL_PATH"),
-        add_expert_to_obs: bool = True,
-        residual_scale: float = 0.2,
-        expert_scale: float = 1.0,
-        d3rlpy_model: bool = False,
+            self,
+            env: gym.Env,
+            model_path: Optional[str] = os.environ.get("MODEL_PATH"),
+            add_expert_to_obs: bool = True,
+            residual_scale: float = 0.2,
+            expert_scale: float = 1.0,
+            d3rlpy_model: bool = False,
     ):
         assert isinstance(env.observation_space, gym.spaces.Box)
         assert model_path is not None
@@ -414,3 +418,113 @@ class ResidualExpertWrapper(gym.Wrapper):
         obs, self.expert_action = self._predict(obs)
 
         return obs, reward, done, info
+
+
+def crop_img(img, crop_ratio):
+    ratio = crop_ratio / 100
+    nb_line_keep = int(len(img) * ratio)
+    new_img = img[(int(len(img) - nb_line_keep)):int(len(img) * 0.9)]
+    return new_img
+
+
+def filter_img(img=None, v_min=100, v_max=200, filter_type="gaussian", nbr_img=0, random_nbr=0, alpha=0.4, beta=0.6,
+               log_activated=False):
+    pre_filter = cv2.GaussianBlur(img, (3, 3), 0)
+    if filter_type == "gaussian":
+        filter = pre_filter
+    elif filter_type == "median":
+        filter = cv2.medianBlur(img, 3)
+    elif filter_type == "canny":
+        edges_1D = cv2.Canny(pre_filter, v_min, v_max)
+        edges_3D = np.stack((edges_1D, edges_1D, edges_1D), axis=2)
+        filter = cv2.addWeighted(pre_filter, alpha, edges_3D, beta, 0)
+    elif filter_type == "laplacian":
+        edges = cv2.Laplacian(pre_filter, ddepth=cv2.CV_8U)
+        filter = cv2.addWeighted(pre_filter, alpha, edges, beta, 0)
+    elif filter_type == "sobel":
+        filter = cv2.Sobel(pre_filter, ddepth=cv2.CV_64F, dx=1, dy=0)
+    elif filter_type == "erode":
+        kernel = np.ones((5, 5), np.uint8)
+        eroded = cv2.erode(pre_filter, kernel)
+        filter = cv2.dilate(eroded, kernel)
+    elif filter_type == "erode+laplacian":
+        kernel = np.ones((5, 5), np.uint8)
+        eroded = cv2.erode(pre_filter, kernel)
+        filter = cv2.dilate(eroded, kernel)
+        filter = cv2.Laplacian(filter, ddepth=cv2.CV_64F)
+    elif filter_type == "laplacian+erode":
+        pre_filter = cv2.Laplacian(pre_filter, ddepth=cv2.CV_64F)
+        kernel = np.ones((5, 5), np.uint8)
+        filter = cv2.dilate(pre_filter, kernel)
+    elif filter_type == "log":
+        filter = img
+    else:
+        filter_type = "none"
+        filter = pre_filter
+    if log_activated:
+        directory_path = f"log_img/log_{filter_type}_{random_nbr}"
+        if not os.path.exists(directory_path):
+            os.makedirs(directory_path)
+        img_to_save = f"/img_{nbr_img}.jpg"
+        path = directory_path + img_to_save
+        cv2.imwrite(path, filter)
+    return filter
+
+
+class PreProcessingWrapper(gym.Wrapper):
+    """
+    PreProcess the img received by the camera for better learning rate
+
+    :param env: (gym.Env)
+    :param crop_ratio : int
+    :param filter_type: string
+    :param min_luminosity_value: int
+    :param max_luminosity_value: int
+    """
+
+    def __init__(self, env: gym.Env, crop_ratio=60, filter_type="gaussian", min_luminosity_value=150,
+                 max_luminosity_value=200, alpha=0.4, beta=0.6, log_activated=False, normalize=True):
+        assert isinstance(env.observation_space, gym.spaces.Box)
+        super(PreProcessingWrapper, self).__init__(env)
+        self.filter_type = filter_type
+        self.crop_ratio = crop_ratio
+        self.min_luminosity_value = min_luminosity_value
+        self.max_luminosity_value = max_luminosity_value
+        self.alpha = alpha
+        self.beta = beta
+        self.nbr_img = 0
+        self.log_activated = log_activated
+        self.random_nbr = random.randint(0, 10000)
+        self.normalize = normalize
+        # Overwrite the observation space
+        raw_sensor_size = self.viewer.get_sensor_size()
+        # new_sensor_size = (int(raw_sensor_size[0] * (crop_ratio / 100 - 0.1)), raw_sensor_size[1], raw_sensor_size[2])
+        new_sensor_size = (
+        int(raw_sensor_size[0] * (crop_ratio / 100 - 0.1)) * raw_sensor_size[1] * raw_sensor_size[2],)
+        if self.normalize:
+            self.observation_space = gym.spaces.Box(low=0, high=1, shape=new_sensor_size, dtype=np.float32)
+        else:
+            self.observation_space = gym.spaces.Box(low=0, high=255, shape=new_sensor_size, dtype=np.uint8)
+
+    def step(self, action):
+        self.nbr_img += 1
+        obs, reward, done, info = self.env.step(action)
+        processed_obs = filter_img(crop_img(obs[:, :, ::-1], self.crop_ratio), self.min_luminosity_value,
+                                   self.max_luminosity_value,
+                                   filter_type=self.filter_type, nbr_img=self.nbr_img, random_nbr=self.random_nbr,
+                                   alpha=self.alpha, beta=self.beta, log_activated=self.log_activated)
+        processed_obs = processed_obs.flatten()
+        if self.normalize:
+            return processed_obs / 255, reward, done, info
+        return processed_obs, reward, done, info
+
+    def reset(self):
+        obs = self.env.reset()
+        processed_obs = filter_img(crop_img(obs[:, :, ::-1], self.crop_ratio), self.min_luminosity_value,
+                                   self.max_luminosity_value,
+                                   filter_type=self.filter_type, nbr_img=self.nbr_img, random_nbr=self.random_nbr,
+                                   alpha=self.alpha, beta=self.beta, log_activated=self.log_activated)
+        processed_obs = processed_obs.flatten()
+        if self.normalize:
+            return processed_obs / 255
+        return processed_obs
