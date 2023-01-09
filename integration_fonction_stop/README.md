@@ -1,6 +1,6 @@
 # Intégrer le lot stop
 
-Pour intégrer le lot STOP, il y a X fichiers à modifier.
+Pour intégrer le lot STOP, il y a 4 fichiers à modifier.
 
 1. On ajoute une part au framework
 2. On ajoute le resnet entrainé
