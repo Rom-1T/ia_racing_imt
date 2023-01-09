@@ -18,9 +18,11 @@ Pour créer un dataset train et un dataset test, on peut utiliser le script
 Il créer des dossiers train et test avec des répertoires class_0 et class_1 dedans.
 
 ### Algo de classification
-* Resenet 5
+* Resenet 18
 
-		Pytorch-resnet-5.ipynb
+	stop/resnet18.py
 
 
+## Intégration de la fonction stop
 
+Voir fichier integration_fonction_stop
