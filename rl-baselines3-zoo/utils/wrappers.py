@@ -167,7 +167,23 @@ class LowPassFilterWrapper(gym.Wrapper):
             filtered[i] = smoothed_action[-1]
         return self.env.step(filtered)
 
+class SteeringSmoothingWrapper(gym.Wrapper):
+    def __init__(self, env, smoothing_coef: float = 0.0):
+        super(ActionSmoothingWrapper, self).__init__(env)
+        self.last_steering = None
 
+    def reset(self):
+        self.smoothed_steering = None
+        return self.env.reset()
+
+    def step(self, action):
+        if self.last_steering is None:
+            self.last_steering = 0
+            return self.env.step(self.action)
+        else:
+            self.reward -= abs(action[0]-self.last_steering)
+            self.last_steering = action[0]
+            return self.env.step(self.action)
 class ActionSmoothingWrapper(gym.Wrapper):
     """
     Smooth the action using exponential moving average.
