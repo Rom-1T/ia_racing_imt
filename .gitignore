@@ -1,0 +1,7 @@
+supervise/dataset_drive/*
+supervise/drive_models/*
+supervise/dataset_comprehension/*
+
+supervise/comprehension_pilot_test.py
+supervise/comprehension_pilot_train.py
+supervise/comprehension_supervise.py
