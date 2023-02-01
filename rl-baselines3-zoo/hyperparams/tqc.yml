@@ -1,6 +1,7 @@
 ## Custom envs
 
 donkey-minimonaco-track-v0:
+  normalize: "{'norm_obs': False, 'norm_reward': False}"
   env_wrapper:
 #    - vec_env_wrapper:
 #        - utils.wrappers.VecForceResetWrapper
