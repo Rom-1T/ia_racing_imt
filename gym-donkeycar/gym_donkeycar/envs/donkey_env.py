@@ -62,6 +62,7 @@ class DonkeyEnv(gym.Env):
         print("starting DonkeyGym env")
         self.viewer = None
         self.proc = None
+        # conf["exe_path"] = "/home/rom1/Documents/projects/DonkeySimLinux/Builds/donkey_sim.x86_64"
 
         if conf is None:
             conf = {}
@@ -211,4 +212,9 @@ class ThunderhillTrackEnv(DonkeyEnv):
 
 class CircuitLaunchEnv(DonkeyEnv):
     def __init__(self, *args, **kwargs):
-        super().__init__(level="circuit_launch", *args, **kwargs)
+        super().__init__(level="TestScene", *args, **kwargs)
+
+
+class Test(DonkeyEnv):
+    def __init__(self, *args, **kwargs):
+        super().__init__(level="test", *args, **kwargs)

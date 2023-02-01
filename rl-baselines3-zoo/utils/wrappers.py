@@ -168,32 +168,6 @@ class LowPassFilterWrapper(gym.Wrapper):
         return self.env.step(filtered)
 
 
-class ActionSmoothingWrapper(gym.Wrapper):
-    """
-    Smooth the action using exponential moving average.
-
-    :param env: (gym.Env)
-    :param smoothing_coef: (float) Smoothing coefficient (0 no smoothing, 1 very smooth)
-    """
-
-    def __init__(self, env, smoothing_coef: float = 0.0):
-        super(ActionSmoothingWrapper, self).__init__(env)
-        self.smoothing_coef = smoothing_coef
-        self.smoothed_action = None
-        # from https://github.com/rail-berkeley/softlearning/issues/3
-        # for smoothing latent space
-        # self.alpha = self.smoothing_coef
-        # self.beta = np.sqrt(1 - self.alpha ** 2) / (1 - self.alpha)
-
-    def reset(self):
-        self.smoothed_action = None
-        return self.env.reset()
-
-    def step(self, action):
-        if self.smoothed_action is None:
-            self.smoothed_action = np.zeros_like(action)
-        self.smoothed_action = self.smoothing_coef * self.smoothed_action + (1 - self.smoothing_coef) * action
-        return self.env.step(self.smoothed_action)
 
 
 class DelayedRewardWrapper(gym.Wrapper):
@@ -499,11 +473,12 @@ class PreProcessingWrapper(gym.Wrapper):
         # Overwrite the observation space
         raw_sensor_size = self.viewer.get_sensor_size()
         # new_sensor_size = (int(raw_sensor_size[0] * (crop_ratio / 100 - 0.1)), raw_sensor_size[1], raw_sensor_size[2])
-        new_sensor_size = (
-        int(raw_sensor_size[0] * (crop_ratio / 100 - 0.1)) * raw_sensor_size[1] * raw_sensor_size[2],)
         if self.normalize:
+            new_sensor_size = (
+                int(raw_sensor_size[0] * (crop_ratio / 100 - 0.1)) * raw_sensor_size[1] * raw_sensor_size[2],)
             self.observation_space = gym.spaces.Box(low=0, high=1, shape=new_sensor_size, dtype=np.float32)
         else:
+            new_sensor_size = (int(raw_sensor_size[0] * (crop_ratio / 100 - 0.1)),raw_sensor_size[1],raw_sensor_size[2])
             self.observation_space = gym.spaces.Box(low=0, high=255, shape=new_sensor_size, dtype=np.uint8)
 
     def step(self, action):
@@ -513,8 +488,8 @@ class PreProcessingWrapper(gym.Wrapper):
                                    self.max_luminosity_value,
                                    filter_type=self.filter_type, nbr_img=self.nbr_img, random_nbr=self.random_nbr,
                                    alpha=self.alpha, beta=self.beta, log_activated=self.log_activated)
-        processed_obs = processed_obs.flatten()
         if self.normalize:
+            processed_obs = processed_obs.flatten()
             return processed_obs / 255, reward, done, info
         return processed_obs, reward, done, info
 
@@ -524,7 +499,57 @@ class PreProcessingWrapper(gym.Wrapper):
                                    self.max_luminosity_value,
                                    filter_type=self.filter_type, nbr_img=self.nbr_img, random_nbr=self.random_nbr,
                                    alpha=self.alpha, beta=self.beta, log_activated=self.log_activated)
-        processed_obs = processed_obs.flatten()
         if self.normalize:
+            processed_obs = processed_obs.flatten()
             return processed_obs / 255
         return processed_obs
+
+
+class SteeringSmoothingWrapper(gym.Wrapper):
+    def __init__(self, env, smoothing_coef: float = 0.0):
+        super(SteeringSmoothingWrapper, self).__init__(env)
+        self.past_action = None
+        self.smoothing_coef = smoothing_coef
+
+    def reset(self):
+        self.past_action = None
+        return self.env.reset()
+
+    def step(self, action):
+        obs, reward, done, info = self.env.step(action)
+        if self.past_action is None:
+            self.past_action = np.zeros_like(action)
+        else:
+            reward_loss = self.smoothing_coef * (action[0]-self.past_action[0])/action[0]
+            reward = reward - abs(reward_loss * reward)
+            if reward < -1.0 :
+                reward = -1.0
+            self.past_action = action
+        return obs, reward, done, info
+
+class ActionSmoothingWrapper(gym.Wrapper):
+    """
+    Smooth the action using exponential moving average.
+
+    :param env: (gym.Env)
+    :param smoothing_coef: (float) Smoothing coefficient (0 no smoothing, 1 very smooth)
+    """
+
+    def __init__(self, env, smoothing_coef: float = 0.0):
+        super(ActionSmoothingWrapper, self).__init__(env)
+        self.smoothing_coef = smoothing_coef
+        self.smoothed_action = None
+        # from https://github.com/rail-berkeley/softlearning/issues/3
+        # for smoothing latent space
+        # self.alpha = self.smoothing_coef
+        # self.beta = np.sqrt(1 - self.alpha ** 2) / (1 - self.alpha)
+
+    def reset(self):
+        self.smoothed_action = None
+        return self.env.reset()
+
+    def step(self, action):
+        if self.smoothed_action is None:
+            self.smoothed_action = np.zeros_like(action)
+        self.smoothed_action = self.smoothing_coef * self.smoothed_action + (1 - self.smoothing_coef) * action
+        return self.env.step(self.smoothed_action)

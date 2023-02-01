@@ -1,0 +1,17 @@
+Metadata-Version: 2.1
+Name: ae
+Version: 0.1.0
+Summary: Augmented Autoencoder
+Home-page: UNKNOWN
+Author: Antonin Raffin
+License: MIT
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Requires-Python: >=3.7
+License-File: LICENSE
+
+UNKNOWN
+
