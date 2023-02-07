@@ -33,4 +33,4 @@ Dans la voiture courante, ajouter les lignes suivantes à la fin de la méthode 
 	if cfg.STOP_DETECTION:
         from donkeycar.parts.stop_detection import StopDetection
         stop_detection = StopDetection(cfg)
-        V.add(stop_detection, inputs=['cam/image_array', 'throttle'], outputs=['throttle'])
+        V.add(stop_detection, inputs=['cam/image_array', 'throttle'], outputs=['throttle', 'lap', 'end'])

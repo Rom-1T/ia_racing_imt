@@ -21,6 +21,7 @@ class StopDetection():
         self.model = torch.load(model_pth)
     
     def run(self, image_arr, throttle):
+        print("Tour", self.lap_counter)
         transform = transforms.Compose([
             transforms.ToTensor()
         ])
@@ -53,7 +54,7 @@ class StopDetection():
         self.previous_image_labels = self.previous_image_labels[1: self.number_previous_images - 1] + [output_label]
         
         if self.end:
-            return 0
+            return 0, self.lap_counter, True
         
         if self.trigger_stop():
             self.end = True
@@ -61,9 +62,9 @@ class StopDetection():
             if self.prints:
                 print("Arrivee passee ! ")
                 
-            return -1.1*throttle # Pour que l'arret soit visible
+            return -1.1*throttle, self.lap_counter, True # Pour que l'arret soit visible
     
-        return throttle
+        return throttle, self.lap_counter, False
         
     def trigger_stop(self):
         return self.lap_counter > self.lap_counter_max
