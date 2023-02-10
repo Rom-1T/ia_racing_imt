@@ -158,7 +158,7 @@ IMAGE_H = 120
 IMAGE_DEPTH = 3         # default RGB=3, make 1 for mono
 CAMERA_FRAMERATE = 20
 CAMERA_VFLIP = True
-CAMERA_HFLIP = TRUE
+CAMERA_HFLIP = True
 UNDISTORT = True
 ```
 
@@ -172,4 +172,4 @@ UNDISTORT = True
 
 ```
 
-If everything is done correclty, you should be able to see the undistort filter on the camera output on the webcontroller.
+If everything is done correclty, you should be able to see the undistort filter on the camera output in the webcontroller.
