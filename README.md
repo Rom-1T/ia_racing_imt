@@ -63,4 +63,8 @@ Save the 3 output (DIM, K and D).
 
 To unfish the images, you can use the example _undistort.py._ Replace (DIM,K and D) with the output of the calibration and it is done.
 
-...
+
+![alt text](example.jpg "Example of image")
+![alt text](example_unfish.jpg "Example of unfished image")
+
+
