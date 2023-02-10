@@ -33,7 +33,9 @@ Don't forget to write down the verticies dimension as it is an input of the pyth
 #### Create a set of images
 
 Lens calibration uses a set of images taken by the same camera/lens, each one showing a checkerboard pattern in a different position, so that taken collectively, the checkerboard appears in almost entire field of view. The more images, the more accurate the calibration will be, but typically 10 to 15 images suffice.
+
 ![alt text](calibrate/img/fisheye_1.jpg "Example of image")
+![alt text](calibrate/img/fisheye_31.jpg "Example of image")
 
 It is possible to use the script _take\_picture\_rasp.py_ to create the set of images.
 
