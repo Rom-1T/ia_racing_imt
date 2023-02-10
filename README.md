@@ -1,5 +1,7 @@
 # Camera Calibration
 
+The calibration of the camera lens is needed only when you intend to use a model trained with a simulator (Reinforcement) as you need to make the reality look alike the simulation by, for instance, removing the fisheye effect. 
+
 ### Installation and set-up
 
 This part can be done on the host pc. See Usage for the rapsberry pi integration.
