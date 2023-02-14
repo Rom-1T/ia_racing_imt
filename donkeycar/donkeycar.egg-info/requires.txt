@@ -1,58 +1,58 @@
-numpy
-pillow
-docopt
-tornado
-requests
-h5py
 PrettyTable
+docopt
+h5py
+numpy
 paho-mqtt
-simple_pid
+pillow
 progress
-typing_extensions
-pyfiglet
 psutil
+pyfiglet
+requests
+simple_pid
+tornado
+typing_extensions
 
 [ci]
 codecov
 
 [dev]
+mypy
 pytest
 pytest-cov
 responses
-mypy
 
 [mm1]
 pyserial
 
 [nano]
 Adafruit_PCA9685
+Jetson.GPIO
 adafruit-circuitpython-lis3dh
 adafruit-circuitpython-ssd1306
-Jetson.GPIO
 pyserial
 
 [pc]
-matplotlib
-kivy
-pandas
-pyyaml
-plotly
 imgaug
+kivy
+matplotlib
+pandas
+plotly
+pyyaml
 
 [pi]
-picamera
 Adafruit_PCA9685
+RPi.GPIO
 adafruit-circuitpython-lis3dh
 adafruit-circuitpython-ssd1306
-RPi.GPIO
-pyserial
 imgaug
+picamera
+pyserial
 
 [tf]
 tensorflow==2.2.0
 
 [torch]
-pytorch>=1.7.1
-torchvision
-torchaudio
 fastai
+pytorch>=1.7.1
+torchaudio
+torchvision

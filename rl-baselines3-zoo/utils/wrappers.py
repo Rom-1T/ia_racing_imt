@@ -11,6 +11,8 @@ from scipy.signal import iirfilter, sosfilt, zpk2sos
 from stable_baselines3 import SAC
 from stable_baselines3.common.vec_env.base_vec_env import VecEnv, VecEnvObs, VecEnvStepReturn, VecEnvWrapper
 import cv2
+from deformation import motion_blur_effect
+from filter import final_filter
 import time
 import matplotlib.pyplot as plt
 
@@ -404,8 +406,9 @@ def crop_img(img, crop_ratio):
 def filter_img(img=None, v_min=100, v_max=200, filter_type="gaussian", nbr_img=0, random_nbr=0, alpha=0.4, beta=0.6,
                log_activated=False):
     pre_filter = cv2.GaussianBlur(img, (3, 3), 0)
-    if filter_type == "gaussian":
-        filter = pre_filter
+    if filter_type == "gaussian_final":
+        pre_filter = motion_blur_effect(img)
+        filter = final_filter(pre_filter)
     elif filter_type == "median":
         filter = cv2.medianBlur(img, 3)
     elif filter_type == "canny":
@@ -456,7 +459,7 @@ class PreProcessingWrapper(gym.Wrapper):
     :param max_luminosity_value: int
     """
 
-    def __init__(self, env: gym.Env, crop_ratio=60, filter_type="gaussian", min_luminosity_value=150,
+    def __init__(self, env: gym.Env, crop_ratio=60, filter_type="gaussian_final", min_luminosity_value=150,
                  max_luminosity_value=200, alpha=0.4, beta=0.6, log_activated=False, normalize=True):
         assert isinstance(env.observation_space, gym.spaces.Box)
         super(PreProcessingWrapper, self).__init__(env)

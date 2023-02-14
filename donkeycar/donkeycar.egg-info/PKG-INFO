@@ -14,14 +14,14 @@ Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Programming Language :: Python :: 3.6
 Classifier: Programming Language :: Python :: 3.7
-Provides-Extra: pi
+Provides-Extra: ci
+Provides-Extra: dev
+Provides-Extra: mm1
 Provides-Extra: nano
 Provides-Extra: pc
-Provides-Extra: dev
-Provides-Extra: ci
+Provides-Extra: pi
 Provides-Extra: tf
 Provides-Extra: torch
-Provides-Extra: mm1
 License-File: LICENSE
 
 # donkeycar: a python self driving library

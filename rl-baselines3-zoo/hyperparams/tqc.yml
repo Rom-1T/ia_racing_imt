@@ -20,6 +20,7 @@ donkey-minimonaco-track-v0:
 #        normalize: False
     - aae-train-donkeycar.ae.wrapper.AutoencoderWrapper:
         ae_path: "/home/rom1/Documents/ia_racing_imt/rl-baselines3-zoo/aae-train-donkeycar/auto-encoder-agent/ae-32_400.pkl"
+        filter : True
 #    - utils.wrappers.SteeringSmoothingWrapper:
 #        smoothing_coef: 0.2
   callback:
