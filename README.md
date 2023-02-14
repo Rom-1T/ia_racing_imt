@@ -1,28 +1,16 @@
 # ia\_racing\_imt
 ## Stop
-### Pour enregistrer un nouveau dataset
-Les datasets sont dans le répertoire stop/datasets
 
-Pour classer les images du dataset, on peut utiliser le script : 
-	
-	cate.py
+### Données
+Dataset d'entrainement : `stop/new_dataset/`
 
-* 1  si l'image a une ligne de stop
-* 0 sinon
+Dataset de validation : `stop/validation_dataset/`
 
-### Créer des datasets train/test
-Pour créer un dataset train et un dataset test, on peut utiliser le script 
+Pour chaque dataset, le fichier `labels.json` contient le label pour chaque image du dataset. Le label vaut 1 s'il y a présence de ligne, 0 sinon.
 
-	create_test_n_train.py
+### Architecture et modèle
+Plus d'information dans le PDF `stop/Formalisation.pdf`.
 
-Il créer des dossiers train et test avec des répertoires class_0 et class_1 dedans.
+### Intégration de la fonction au modèle
+Explications données dans le `README.md` du dossier `integration_fonction_stop`
 
-### Algo de classification
-* Resenet 18
-
-	stop/resnet18.py
-
-
-## Intégration de la fonction stop
-
-Voir fichier integration_fonction_stop
