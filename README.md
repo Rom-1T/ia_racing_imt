@@ -82,4 +82,7 @@ def motion_blur_effect(img,kernel_size=None) :
     return horizonal_mb
 ```
 
+
+![Original img](img\_example/example\_ori.jpg.jpg) ![Motion blur](img\_example/degraded\_img.jpg)
+
 ####
