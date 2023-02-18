@@ -18,11 +18,69 @@ donkey-minimonaco-track-v0:
 #        beta: 0.9
 #        log_activated: False
 #        normalize: False
+    - utils.wrappers.Deadzone:
+        deadzone: 0.15
     - aae-train-donkeycar.ae.wrapper.AutoencoderWrapper:
-        ae_path: "/home/rom1/Documents/ia_racing_imt/rl-baselines3-zoo/aae-train-donkeycar/auto-encoder-agent/ae-32_400.pkl"
+        ae_path: "/home/rom1/Documents/ia_racing_imt/rl-baselines3-zoo/aae-train-donkeycar/auto-encoder-agent/ae-32_simu_degrade_reel_400.pkl"
         filter : True
-#    - utils.wrappers.SteeringSmoothingWrapper:
-#        smoothing_coef: 0.2
+        degradation : True
+    - utils.wrappers.ActionSmoothingWrapper:
+        smoothing_coef: 0.5
+    - utils.wrappers.PastThrottle:
+        length: 5
+        auto_encoder_size : 32
+  callback:
+    - utils.callbacks.ParallelTrainCallback:
+        gradient_steps: 200
+
+  n_timesteps: !!float 2e6
+  policy: 'MlpPolicy'
+  learning_rate: !!float 7.3e-4
+  #learning_rate: !!float 3e-4
+  buffer_size: 100000
+  batch_size: 256
+  ent_coef: 'auto'
+  gamma: 0.99
+  tau: 0.02
+  # train_freq: [1, "episode"]
+  train_freq: 200
+  # gradient_steps: -1
+  gradient_steps: 256
+#  learning_starts: 5000
+#  use_sde_at_warmup: True
+#  use_sde: True
+#  sde_sample_freq: 16
+#  policy_kwargs: "dict(log_std_init=-3, net_arch=[256, 256], n_critics=2)"
+
+donkey-gray-v0:
+  normalize: "{'norm_obs': False, 'norm_reward': False}"
+  env_wrapper:
+#    - vec_env_wrapper:
+#        - utils.wrappers.VecForceResetWrapper
+    - gym.wrappers.time_limit.TimeLimit:
+          max_episode_steps: 5000
+#    - utils.wrappers.HistoryWrapper:
+#          horizon: 2
+#    - utils.wrappers.PreProcessingWrapper:
+#        crop_ratio: 70
+#        filter_type: "laplacian"
+#        min_luminosity_value: 195
+#        max_luminosity_value: 200
+#        alpha: 0.15
+#        beta: 0.9
+#        log_activated: False
+#        normalize: False
+    - utils.wrappers.Deadzone:
+        deadzone: 0.15
+    - aae-train-donkeycar.ae.wrapper.AutoencoderWrapper:
+        ae_path: "/home/rom1/Documents/ia_racing_imt/rl-baselines3-zoo/aae-train-donkeycar/auto-encoder-agent/ae-32_simu_degrade_reel_400.pkl"
+        filter : True
+        degradation : True
+    - utils.wrappers.ActionSmoothingWrapper:
+        smoothing_coef: 0.5
+    - utils.wrappers.PastThrottle:
+        length: 5
+        auto_encoder_size : 32
   callback:
     - utils.callbacks.ParallelTrainCallback:
         gradient_steps: 200
@@ -116,8 +174,8 @@ donkey-big-circle-v0:
   env_wrapper:
     #    - vec_env_wrapper:
     #        - utils.wrappers.VecForceResetWrapper
-    #    - gym.wrappers.time_limit.TimeLimit:
-    #          max_episode_steps: 10000
+#        - gym.wrappers.time_limit.TimeLimit:
+#              max_episode_steps: 10000
     #    - utils.wrappers.HistoryWrapper:
     #          horizon: 2
     - utils.wrappers.PreProcessingWrapper:

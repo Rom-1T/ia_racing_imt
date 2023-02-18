@@ -11,8 +11,8 @@ from scipy.signal import iirfilter, sosfilt, zpk2sos
 from stable_baselines3 import SAC
 from stable_baselines3.common.vec_env.base_vec_env import VecEnv, VecEnvObs, VecEnvStepReturn, VecEnvWrapper
 import cv2
-from deformation import motion_blur_effect
-from filter import final_filter
+#from deformation import motion_blur_effect
+#from filter import final_filter
 import time
 import matplotlib.pyplot as plt
 
@@ -556,3 +556,40 @@ class ActionSmoothingWrapper(gym.Wrapper):
             self.smoothed_action = np.zeros_like(action)
         self.smoothed_action = self.smoothing_coef * self.smoothed_action + (1 - self.smoothing_coef) * action
         return self.env.step(self.smoothed_action)
+
+
+class PastThrottle(gym.Wrapper) :
+    def __init__(self, env: gym.Env,length=5,auto_encoder_size = 32):
+        super().__init__(env)
+        self.autoencodersize = auto_encoder_size
+        self.length = length
+        self.past_throttle = np.zeros(self.length)
+        self.observation_space = gym.spaces.Box(
+            low=-np.inf,
+            high=np.inf,
+            shape=(self.length + self.autoencodersize,),
+            dtype=np.float32,
+        )
+    def reset(self) -> np.ndarray:
+        obs = self.env.reset()
+        self.past_throttle = np.zeros(self.length)
+        new_obs = np.concatenate([obs, self.past_throttle])
+        return new_obs.flatten()
+
+    def step(self, action: np.ndarray):
+        obs, reward, done, infos = self.env.step(action)
+        last_throttle = action[1]
+        self.past_throttle = np.insert(self.past_throttle, 0, last_throttle, axis=0)
+        self.past_throttle = np.delete(self.past_throttle,self.length)
+        new_obs = np.concatenate([obs, self.past_throttle])
+
+        return new_obs.flatten(), reward, done, infos
+
+class Deadzone(gym.Wrapper) :
+    def __init__(self, env: gym.Env,deadzone = 0.15):
+        super().__init__(env)
+        self.deadzone = deadzone
+    def step(self, action: np.ndarray):
+        if action[1] <= self.deadzone :
+            action[1] = 0
+        return self.env.step(action)

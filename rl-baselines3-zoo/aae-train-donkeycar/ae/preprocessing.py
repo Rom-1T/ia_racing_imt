@@ -1,6 +1,7 @@
 import cv2
 from random import randint
 import numpy as np
+import albumentations as A
 def motion_blur_effect(img,kernel_size=None) :
     if kernel_size == None :
         kernel_size = randint(1,8)
@@ -36,3 +37,22 @@ def final_filter(image) :
     )
     filter = cv2.addWeighted(threshold,1,image_result,0.5,0.0)
     return(filter)
+
+def degradation(img):
+    x = np.random.randint(50, 100)
+    img = A.RandomSunFlare(flare_roi=(0, 0, 1, 1), num_flare_circles_lower=1, num_flare_circles_upper=3,
+                           src_color=(255, 255, 255), src_radius=x, always_apply=False)(image=img)['image']
+    y = np.random.randint(0, 5)
+    t1 = A.RandomSunFlare(flare_roi=(0, 0, 1, 1), num_flare_circles_lower=1, num_flare_circles_upper=3,
+                          src_color=(255, 255, 255), src_radius=x, always_apply=True)
+    t2 = A.RandomRain(slant_lower=-10, slant_upper=10, drop_length=20, drop_width=1,
+                      drop_color=(255, 255, 255), blur_value=1, brightness_coefficient=1, rain_type=None,
+                      always_apply=True)
+    t3 = A.CoarseDropout(max_holes=10, max_height=10, max_width=15, min_holes=1, min_height=1, min_width=1,
+                         fill_value=(255, 255, 255), mask_fill_value=None, always_apply=True)
+    t4_ = A.MotionBlur(blur_limit=(7, 7), always_apply=True)
+    t4 = A.Compose([t4_, t4_])
+    transfos = A.SomeOf([t1, t2, t3, t4], n=y)
+    img = transfos(image=img)['image']
+    return img
+
