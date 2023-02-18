@@ -68,7 +68,7 @@ class Classif:
     def __init__(self, device = False):
         
         self.classes = []
-        self.decision = Decision(0.8)
+        self.decision = Decision(0.3)
         
         self.epoch_losses = []
         self.epoch_accs = []
@@ -412,7 +412,7 @@ if __name__ == "__main__":
     MODELE_ENREGISTRE = True
     ENREGISTRER_MODELE = False
     
-    N_EPOCHS = 10
+    N_EPOCHS = 15
     BATCH_SIZE_TRAIN = 10
     BATCH_SIZE_VALIDATE = 10
     
@@ -425,7 +425,7 @@ if __name__ == "__main__":
             nn.Sigmoid()
         )
     else:
-        m = ROOT_DIR + "sigmoid-10e.pth"
+        m = ROOT_DIR + "sigmoid_sigma.pth"
     
     c = Classif()
     c.load_model(m)
@@ -437,19 +437,19 @@ if __name__ == "__main__":
 
     
 
-        c.set_dataset('TRAIN', ROOT_DIR + 'new_dataset/train', data_batch_size=BATCH_SIZE_TRAIN)
-        c.set_dataset('TEST', ROOT_DIR + 'new_dataset/test', data_batch_size=BATCH_SIZE_TRAIN)
+        c.set_dataset('TRAIN', ROOT_DIR + 'dataset_sigma/train', data_batch_size=BATCH_SIZE_TRAIN)
+        c.set_dataset('TEST', ROOT_DIR + 'dataset_sigma/test', data_batch_size=BATCH_SIZE_TRAIN)
     
-    c.set_dataset('VALIDATION', ROOT_DIR + 'validation_dataset', data_batch_size=BATCH_SIZE_VALIDATE)
+    c.set_dataset('VALIDATION', ROOT_DIR + 'validation_dataset_sigma', data_batch_size=BATCH_SIZE_VALIDATE)
     # c.set_classes(['sans', 'avec'])
     
     if not(MODELE_ENREGISTRE):
         c.train('TRAIN', 'TEST', N_EPOCHS)
         # c.show_stats()
-        c.test_several_throttles([0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95])
+        c.test_several_throttles([0.1, 0.3, 0.5, 0.8, 0.9, 0.95, 0.99])
     
     if ENREGISTRER_MODELE:
-        c.save(ROOT_DIR + 'sigmoid-10e.pth')
+        c.save(ROOT_DIR + 'sigmoid_sigma.pth')
     
     r, n, s, e = c.validate('VALIDATION')
     
@@ -465,8 +465,8 @@ if __name__ == "__main__":
     
     print(e)
     
-    test = c.test_image(ROOT_DIR + "validation_dataset/class0/1431_cam_image_array_.jpg")
-    fig = plt.figure(0)
-    fig.suptitle(test[1]) 
-    plt.imshow(test[0])
-    plt.show()
+    # test = c.test_image(ROOT_DIR + "validation_dataset/class0/1431_cam_image_array_.jpg")
+    # fig = plt.figure(0)
+    # fig.suptitle(test[1]) 
+    # plt.imshow(test[0])
+    # plt.show()
