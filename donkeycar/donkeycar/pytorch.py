@@ -36,8 +36,8 @@ class CombinedModel():
         self.model1 = model1
         self.model2 = model2
 
-    def forward(self, x, **kwargs):
-        x1 = np.append(self.model1.encode_from_raw_image(x).flatten(),0)
+    def forward(self, x, throttle **kwargs):
+        x1 = np.append(self.model1.encode_from_raw_image(x).flatten(),throttle)
         x2 = self.model2.predict(x1, deterministic=True)
         return x2
 
@@ -83,7 +83,7 @@ class PytorchReinforcment():
 
 
 
-    def run(self, img_arr: np.ndarray, other_arr: List[float] = None) \
+    def run(self, img_arr: np.ndarray, throttle) \
             -> Tuple[Union[float, np.ndarray], ...]:
         """
         Donkeycar parts interface to run the part in the loop.
@@ -95,7 +95,7 @@ class PytorchReinforcment():
         :return:            tuple of (angle, throttle)
         """
         if self.model:
-            order = self.model.forward(img_arr)[0]
+            order = self.model.forward(img_arr,throttle)[0]
         else:
             order = self.drive.predict(img_arr, deterministic=True)[0]
         logger.info('model order', order)
