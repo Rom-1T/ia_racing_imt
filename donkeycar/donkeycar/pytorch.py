@@ -84,7 +84,7 @@ class PytorchReinforcment():
 
 
 
-    def run(self, img_arr: np.ndarray, throttle) \
+    def run(self, img_arr: np.ndarray, throttle_history) \
             -> Tuple[Union[float, np.ndarray], ...]:
         """
         Donkeycar parts interface to run the part in the loop.
@@ -102,7 +102,6 @@ class PytorchReinforcment():
         order = self.model.forward(img_arr,throttle_history)[0]
         throttle_history = np.insert(throttle_history,0,order[1])[:-1]
         return order, throttle_history
-        return order
 
 
     def __str__(self) -> str:
