@@ -37,7 +37,7 @@ class CombinedModel():
         self.model2 = model2
 
     def forward(self, x,throttle_history, **kwargs):
-        x1 = np.append(self.model1.encode_from_raw_image(x).flatten(),throttle_history)
+        x1 = np.concatenate((self.model1.encode_from_raw_image(x).flatten(),throttle_history))
         x2 = self.model2.predict(x1, deterministic=True)
         return x2
 
