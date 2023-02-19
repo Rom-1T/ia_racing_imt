@@ -36,8 +36,8 @@ class CombinedModel():
         self.model1 = model1
         self.model2 = model2
 
-    def forward(self, x, throttle **kwargs):
-        x1 = np.append(self.model1.encode_from_raw_image(x).flatten(),throttle)
+    def forward(self, x,throttle_history, **kwargs):
+        x1 = np.append(self.model1.encode_from_raw_image(x).flatten(),throttle_history)
         x2 = self.model2.predict(x1, deterministic=True)
         return x2
 
@@ -50,10 +50,11 @@ class PytorchReinforcment():
     Possibility to add an autoencoder.
     """
 
-    def __init__(self):
+     def __init__(self, throttle_history_dim):
         self.ae = None,
         self.drive = None,
         self.model = None,
+        self.throttle_history_dim = throttle_history_dim
         logger.info(f'Created {self}')
 
     def load_ae(self, path: str) -> None:
@@ -94,11 +95,13 @@ class PytorchReinforcment():
                             state vector in the Behavioural model
         :return:            tuple of (angle, throttle)
         """
-        if self.model:
-            order = self.model.forward(img_arr,throttle)[0]
-        else:
-            order = self.drive.predict(img_arr, deterministic=True)[0]
+        
         logger.info('model order', order)
+        if throttle_history is None:
+            throttle_history = [0]*self.throttle_history_dim
+        order = self.model.forward(img_arr,throttle_history)[0]
+        throttle_history = np.insert(throttle_history,0,order[1])[:-1]
+        return order, throttle_history
         return order
 
 
