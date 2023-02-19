@@ -427,9 +427,11 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None,
 
     if model_type == "pytorch":
         if model_path:
-            model = PytorchReinforcment()
+            model = PytorchReinforcment(cfg.THROTTLE_HISTORY_DIM)
             model.load(model_path)
-            V.add(model, inputs=['cam/image_array','throttle'], outputs=['pilot/angle','pilot/throttle'], run_condition='run_pilot')
+            inputs_= ['cam/image_array', 'throttle_history']
+            outputs_ = ['pilot/angle','pilot/throttle', 'throttle_history']
+            V.add(model, inputs=inputs_, outputs=outputs_, run_condition='run_pilot')
 
 
     if model_type != "pytorch":
