@@ -429,7 +429,7 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None,
         if model_path:
             model = PytorchReinforcment()
             model.load(model_path)
-            V.add(model, inputs=inputs, outputs=['pilot/angle','pilot/throttle'], run_condition='run_pilot')
+            V.add(model, inputs=['cam/image_array','throttle'], outputs=['pilot/angle','pilot/throttle'], run_condition='run_pilot')
 
 
     if model_type != "pytorch":
