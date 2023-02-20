@@ -5,8 +5,8 @@ donkey-minimonaco-track-v0:
   env_wrapper:
 #    - vec_env_wrapper:
 #        - utils.wrappers.VecForceResetWrapper
-    - gym.wrappers.time_limit.TimeLimit:
-          max_episode_steps: 5000
+#    - gym.wrappers.time_limit.TimeLimit:
+#          max_episode_steps: 5000
 #    - utils.wrappers.HistoryWrapper:
 #          horizon: 2
 #    - utils.wrappers.PreProcessingWrapper:
@@ -24,8 +24,8 @@ donkey-minimonaco-track-v0:
         ae_path: "/home/rom1/Documents/ia_racing_imt/rl-baselines3-zoo/aae-train-donkeycar/auto-encoder-agent/ae-32_simu_degrade_reel_400.pkl"
         filter : True
         degradation : True
-    - utils.wrappers.ActionSmoothingWrapper:
-        smoothing_coef: 0.5
+#    - utils.wrappers.ActionSmoothingWrapper:
+#        smoothing_coef: 0.5
     - utils.wrappers.PastThrottle:
         length: 5
         auto_encoder_size : 32
@@ -57,8 +57,8 @@ donkey-gray-v0:
   env_wrapper:
 #    - vec_env_wrapper:
 #        - utils.wrappers.VecForceResetWrapper
-    - gym.wrappers.time_limit.TimeLimit:
-          max_episode_steps: 5000
+#    - gym.wrappers.time_limit.TimeLimit:
+#          max_episode_steps: 5000
 #    - utils.wrappers.HistoryWrapper:
 #          horizon: 2
 #    - utils.wrappers.PreProcessingWrapper:
@@ -75,9 +75,9 @@ donkey-gray-v0:
     - aae-train-donkeycar.ae.wrapper.AutoencoderWrapper:
         ae_path: "/home/rom1/Documents/ia_racing_imt/rl-baselines3-zoo/aae-train-donkeycar/auto-encoder-agent/ae-32_simu_degrade_reel_400.pkl"
         filter : True
-        degradation : True
-    - utils.wrappers.ActionSmoothingWrapper:
-        smoothing_coef: 0.5
+        degrade : True
+#    - utils.wrappers.ActionSmoothingWrapper:
+#        smoothing_coef: 0.5
     - utils.wrappers.PastThrottle:
         length: 5
         auto_encoder_size : 32

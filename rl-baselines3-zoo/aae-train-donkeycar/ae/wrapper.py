@@ -18,7 +18,7 @@ class AutoencoderWrapper(gym.Wrapper):
     """
 
     def __init__(self, env: gym.Env, ae_path: str = "/home/rom1/Documents/ia_racing_imt/rl-baselines3-zoo/aae-train-donkeycar/auto-encoder-agent/ae-32_400.pkl",
-                 filter=True,degradation=True):
+                 filter=True,degrade = True, degradation = None):
         super().__init__(env)
         self.autoencoder = load_ae(ae_path)
         self.observation_space = gym.spaces.Box(
@@ -28,7 +28,7 @@ class AutoencoderWrapper(gym.Wrapper):
             dtype=np.float32,
         )
         self.filter = filter
-        self.degradation = degradation
+        self.degradation = degrade
 
     def reset(self) -> np.ndarray:
         obs = self.env.reset()
@@ -62,6 +62,7 @@ class AutoencoderWrapper(gym.Wrapper):
             encoded_image = self.autoencoder.encode_from_raw_image(raw_img)
         # reconstructed_image = self.autoencoder.decode(encoded_image)[0]
         # cv2.imshow("Original", obs[:, :, ::-1])
+        # cv2.imshow("Filtered", filtered)
         # cv2.imshow("Reconstruction", reconstructed_image)
         # # stop if escape is pressed
         # k = cv2.waitKey(0) & 0xFF
