@@ -339,7 +339,7 @@ class Classif:
             plt.title(e[c]['label_value'])
             
         plt.show()
-    
+
     def test_several_throttles(self, throttles = [0.95]):
         fig,ax = plt.subplots()
         
@@ -409,8 +409,9 @@ if __name__ == "__main__":
     
     ROOT_DIR = "./stop/"
     
-    MODELE_ENREGISTRE = True
-    ENREGISTRER_MODELE = False
+    MODELE_ENREGISTRE = False
+    ENREGISTRER_MODELE = True
+    MODELE_NAME = "sigmoid_sigma_crop40.pth"
     
     N_EPOCHS = 15
     BATCH_SIZE_TRAIN = 10
@@ -425,7 +426,7 @@ if __name__ == "__main__":
             nn.Sigmoid()
         )
     else:
-        m = ROOT_DIR + "sigmoid_sigma.pth"
+        m = ROOT_DIR + MODELE_NAME
     
     c = Classif()
     c.load_model(m)
@@ -437,10 +438,10 @@ if __name__ == "__main__":
 
     
 
-        c.set_dataset('TRAIN', ROOT_DIR + 'dataset_sigma/train', data_batch_size=BATCH_SIZE_TRAIN)
-        c.set_dataset('TEST', ROOT_DIR + 'dataset_sigma/test', data_batch_size=BATCH_SIZE_TRAIN)
+        c.set_dataset('TRAIN', ROOT_DIR + 'dataset_sigma_crop/train', data_batch_size=BATCH_SIZE_TRAIN)
+        c.set_dataset('TEST', ROOT_DIR + 'dataset_sigma_crop/test', data_batch_size=BATCH_SIZE_TRAIN)
     
-    c.set_dataset('VALIDATION', ROOT_DIR + 'validation_dataset_sigma', data_batch_size=BATCH_SIZE_VALIDATE)
+    c.set_dataset('VALIDATION', ROOT_DIR + 'validation_dataset_sigma_crop', data_batch_size=BATCH_SIZE_VALIDATE)
     # c.set_classes(['sans', 'avec'])
     
     if not(MODELE_ENREGISTRE):
@@ -449,7 +450,7 @@ if __name__ == "__main__":
         c.test_several_throttles([0.1, 0.3, 0.5, 0.8, 0.9, 0.95, 0.99])
     
     if ENREGISTRER_MODELE:
-        c.save(ROOT_DIR + 'sigmoid_sigma.pth')
+        c.save(ROOT_DIR + MODELE_NAME)
     
     r, n, s, e = c.validate('VALIDATION')
     
