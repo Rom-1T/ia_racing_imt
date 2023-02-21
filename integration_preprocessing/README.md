@@ -10,6 +10,19 @@ Pour intégrer le préprocessing, il y a plusieurs fichiers à modifier.
 
 La partie 6. rappelle comment lancer un modèle et permet de s'assurer que les changements ont correctement été effectués.
 
+## Principe
+
+Le preprocessing est réalisé par une part créée maison. Elle doit donc être intégrée au framework et dans les parts exécutées par la voiture.
+
+Lors du développement du preprocessing, le choix a été fait de conserver l'image brute de la caméra intacte dans le « channel » ```cam/image_array```. Un autre « channel » ```prepro/image_cropped``` a été créé pour récupérer l'image brute rognée (qui peut servir à la partie stop). Un « channel » ```prepro/image_lines``` a également été créé pour récupérer l'image à l'issue du preprocessing complet. C'est donc ```prepro/image_lines``` qui sera à passer au modèle de conduite supervisée.
+
+![](images/inputs-outpust-manage_py.png)
+
+Dans ce document, nous verrons :
+
+- comment intégrer le preprocessing dans donkeycar pour transformer les images acquises par la caméra
+- comment les communiquer au modèle
+- comment avoir un rendu visuel du preprocessing sur l'interface web
 
 ## 1. Créer de la part dans le framework donkeycar
 Dans le framework donkeycar, copier le fichier ```preprocessing.py``` dans le répertoire ```donkeycar/parts```.
