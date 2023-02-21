@@ -222,7 +222,7 @@ On peut alors exécuter le modèle de conduite automatique supervisée en exécu
 
 Source : [Documentation donkeycar](https://docs.donkeycar.com/guide/deep_learning/train_autopilot/)
 
-Il faut au préalable s'assurer d'avoir paramétré de la même manière l'entrainement et ```cars/mycar/myconfig``` pour ne pas avoir d'erreur (notamment au niveau du crop).
+Il faut au préalable s'assurer d'avoir paramétré de la même manière l'entrainement et ```cars/mycar/myconfig``` pour ne pas avoir d'erreur (notamment au niveau du crop). Un nommage de fichier commun pour l'entrainement du modèle peut faciliter le paramétrage du preprocessing pour la course.
 
 Si on souhaite migrer le modèle dans la voiture, sur la Raspberry, il faudra au préalable téléverser le modèle sur la Raspberry grâce à la commande suivante :
 
