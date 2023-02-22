@@ -70,11 +70,12 @@ class Preprocessing():
         lines = cv2.HoughLinesP(edges,cv2.HOUGH_PROBABILISTIC, np.pi/180, 30, minLineLength,maxLineGap)
         
         img = np.zeros((img.shape[0], img.shape[1], 3), dtype = "uint8")
-        for x in range(0, len(lines)):
-            for x1,y1,x2,y2 in lines[x]:
-                pts = np.array([[x1, y1 ], [x2 , y2]], np.int32)
-                cv2.polylines(img, [pts], True, (255, 0,0), 3)
-        img[54:, 33:128, :] = 0 # Masque pour le parchoc
+        if not(lines is None):
+            for x in range(0, len(lines)):
+                for x1,y1,x2,y2 in lines[x]:
+                    pts = np.array([[x1, y1 ], [x2 , y2]], np.int32)
+                    cv2.polylines(img, [pts], True, (255, 0,0), 3)
+            img[54:, 33:128, :] = 0 # Masque pour le parchoc
         return img
 
 
