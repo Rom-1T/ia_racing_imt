@@ -196,7 +196,7 @@ Pour afficher l'image sur l'interface web, il suffit de rajouter une balise img 
 
 	<img src="/video_prepro" />
 
-Pour faciliter la procédure, on peut simplement remplacer le fichier ```donkeycar/donkeycar/web_controller/templates/vehicle.html``` par ```vehicle.html``` qui se trouve dans le dossier ```web``` du répertoire de ce document. *Note : On peut faire même avec le fichier ````base.html```.
+Pour faciliter la procédure, on peut simplement remplacer le fichier ```donkeycar/donkeycar/web_controller/templates/vehicle.html``` par ```vehicle.html``` qui se trouve dans le dossier ```web``` du répertoire de ce document. *Note : On peut faire même avec le fichier ```base.html```.
 
 ## 6. Lancement du modèle et vérification des changements
 
