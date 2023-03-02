@@ -42,7 +42,7 @@ Afin d'exécuter le preprocessing sur les images, ajouter les lignes suivantes d
 	if cfg.PREPROCESSING:
         from donkeycar.parts.preprocessing import Preprocessing
         prepro = Preprocessing(cfg)
-        V.add(prepro, inputs=['cam/image_array'], outputs=['cam/image_array'])
+        V.add(prepro, inputs=['cam/image_array'], outputs=['prepro/image_cropped', 'prepro/image_lines'])
 
 ## 4. Envoyer les images preprocessées au modèle
 
