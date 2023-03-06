@@ -19,20 +19,21 @@ for i in range(9483, 16697):
         
         edges = cv2.Canny(img,150,200,apertureSize = 3)
         minLineLength = 20
-        maxLineGap = 5
+        maxLineGap = 10
         lines = cv2.HoughLinesP(edges,cv2.HOUGH_PROBABILISTIC, np.pi/180, 30, minLineLength,maxLineGap)
         
         # img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
         # img = image_copy
         img = np.zeros((img.shape[0], img.shape[1], 3), dtype = "uint8")
-        for x in range(0, len(lines)):
-            for x1,y1,x2,y2 in lines[x]:
-                #cv2.line(inputImage,(x1,y1),(x2,y2),(0,128,0),2, cv2.LINE_AA)
-                pts = np.array([[x1, y1 ], [x2 , y2]], np.int32)
-                cv2.polylines(img, [pts], True, (0,0,255), 3)
-        
-        # cv2.drawContours(image=image_copy, contours=contours, contourIdx=-1, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
-        img[54:, 33:128, :] = 0 # Masque pour le parchoc
+        if not(lines is None):
+            for x in range(0, len(lines)):
+                for x1,y1,x2,y2 in lines[x]:
+                    #cv2.line(inputImage,(x1,y1),(x2,y2),(0,128,0),2, cv2.LINE_AA)
+                    pts = np.array([[x1, y1 ], [x2 , y2]], np.int32)
+                    cv2.polylines(img, [pts], True, (0,0,255), 3)
+            
+            # cv2.drawContours(image=image_copy, contours=contours, contourIdx=-1, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
+            img[54:, 33:128, :] = 0 # Masque pour le parchoc
         
         if len(img.shape) == 2:
             height, width = img.shape
@@ -43,7 +44,7 @@ for i in range(9483, 16697):
         img_array.append(img)
 
 
-out = cv2.VideoWriter('preprocessing/videos/cropped_BnW_gaussian_canny_polyline.mp4',cv2.VideoWriter_fourcc(*'MP4V'), 20, size, layers)
+out = cv2.VideoWriter('preprocessing/videos/test_params_lines_angles.mp4',cv2.VideoWriter_fourcc(*'MP4V'), 20, size, layers)
  
 for i in range(len(img_array)):
     out.write(img_array[i])
