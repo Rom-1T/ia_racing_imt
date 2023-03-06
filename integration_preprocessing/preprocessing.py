@@ -1,3 +1,4 @@
+from gc import callbacks
 import numpy as np
 import cv2
 
@@ -5,7 +6,11 @@ class Preprocessing():
     
     def __init__(self, cfg):
         self.cropped_from_top = cfg.PREPROCESSED_CROP_FROM_TOP
+        # self.transformations = cfg.PREPROCESSED_METHODS
         self.prepro = cfg.PREPROCESSING_METHOD
+        # self.lines_thr1 = cfg.PREPRO_LINES_THROTTLE1
+        # self.lines_thr2 = cfg.PREPRO_LINES_THROTTLE2
+        # self.lines_apSize = cfg.PREPRO_LINES_APERTURE_SIZE
 
     def bnw(self, img):
         return cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -64,6 +69,7 @@ class Preprocessing():
         img = image.copy()
         img = self.gaussian(img)
         img = self.bnw(img)
+        # edges = cv2.Canny(img, self.lines_thr1, self.lines_thr1, apertureSize = self.lines_apSize)
         edges = cv2.Canny(img, 150, 200, apertureSize = 3)
         minLineLength = 20
         maxLineGap = 5
@@ -98,6 +104,9 @@ class Preprocessing():
             img_preprocessed = self.contour195(img_preprocessed)
         elif self.prepro == "lines":
             img_preprocessed = self.lines(img_preprocessed)
+        elif self.prepro == "bnw":
+            img_preprocessed = self.bnw(img_preprocessed)
+        # print(len(img_preprocessed), len(img_preprocessed[1]))
 
         return img_cropped, img_preprocessed
     
