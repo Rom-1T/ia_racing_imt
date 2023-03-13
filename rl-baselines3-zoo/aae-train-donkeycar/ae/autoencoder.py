@@ -232,11 +232,11 @@ def preprocess_image(image: np.ndarray, convert_to_rgb: bool = False, normalize:
     :param normalize: Whether to normalize or not
     :return:
     """
-    assert image.shape == RAW_IMAGE_SHAPE, f"{image.shape} != {RAW_IMAGE_SHAPE}"
-    # Crop
-    # Region of interest
-    r = ROI
-    image = image[int(r[1]) : int(r[1] + r[3]), int(r[0]) : int(r[0] + r[2])]
+    # assert image.shape == RAW_IMAGE_SHAPE, f"{image.shape} != {RAW_IMAGE_SHAPE}"
+    # # Crop
+    # # Region of interest
+    # r = ROI
+    # image = image[int(r[1]) : int(r[1] + r[3]), int(r[0]) : int(r[0] + r[2])]
     im = image
     # Hack: resize if needed, better to change conv2d  kernel size / padding
     if ROI[2] != INPUT_DIM[1] or ROI[3] != INPUT_DIM[0]:

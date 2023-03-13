@@ -11,10 +11,53 @@ from scipy.signal import iirfilter, sosfilt, zpk2sos
 from stable_baselines3 import SAC
 from stable_baselines3.common.vec_env.base_vec_env import VecEnv, VecEnvObs, VecEnvStepReturn, VecEnvWrapper
 import cv2
-#from deformation import motion_blur_effect
-#from filter import final_filter
-import time
-import matplotlib.pyplot as plt
+
+
+class Preprocessing():
+
+    def __init__(self, cropped_from_top=40, prepro="lines", epaisseur = 1):
+        self.cropped_from_top = cropped_from_top
+        self.prepro = prepro
+        self.epaisseur = epaisseur
+
+    def run(self, image):
+        cropped = cropY(img=image, px_from_top=self.cropped_from_top)
+        filtered = processing_line_v2(image=cropped, mode = self.prepro, epaisseur=self.epaisseur)
+        return cropped, filtered
+
+def cropY(img, px_from_top):
+    return img[px_from_top:np.shape(img)[0], :, :]
+def lines(img, edges):
+    minLineLength = 20
+    maxLineGap = 5
+    lines = cv2.HoughLinesP(edges, cv2.HOUGH_PROBABILISTIC, np.pi / 180, 30, minLineLength, maxLineGap)
+
+    img = np.zeros((img.shape[0], img.shape[1], 3), dtype="uint8")
+    if not (lines is None):
+        for x in range(0, len(lines)):
+            for x1, y1, x2, y2 in lines[x]:
+                pts = np.array([[x1, y1], [x2, y2]], np.int32)
+                cv2.polylines(img, [pts], True, (255, 0, 0), 3)
+    return cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+
+def processing_line_v2(image, mode="edge", epaisseur=1):
+    edge_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    edge_image = cv2.GaussianBlur(edge_image, (3, 3), 1)
+    edge_image = cv2.Canny(edge_image, 150, 200, apertureSize=3)
+    edge_image = cv2.dilate(
+        edge_image,
+        cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5)),
+        iterations=epaisseur
+    )
+    edge_image = cv2.erode(
+        edge_image,
+        cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5)),
+        iterations=epaisseur
+    )
+    if mode == "edge":
+        return edge_image
+    else:
+        return lines(image, edge_image)
 
 
 class VecForceResetWrapper(VecEnvWrapper):
@@ -168,8 +211,6 @@ class LowPassFilterWrapper(gym.Wrapper):
             smoothed_action = lowpass(np.array(self.signal)[:, i], freq=self.freq, df=self.df)
             filtered[i] = smoothed_action[-1]
         return self.env.step(filtered)
-
-
 
 
 class DelayedRewardWrapper(gym.Wrapper):
@@ -448,6 +489,103 @@ def filter_img(img=None, v_min=100, v_max=200, filter_type="gaussian", nbr_img=0
     return filter
 
 
+class Prepro(gym.Wrapper):
+
+    def __init__(self, env: gym.Env, crop_Y=40, filter_type="lines", log=False):
+        assert isinstance(env.observation_space, gym.spaces.Box)
+        super(Prepro, self).__init__(env)
+        self.crop_Y = crop_Y
+        self.filter_type = filter_type
+        self.log = log
+        self.nbr_img = 0
+        self.prepro = Preprocessing(cropped_from_top=self.crop_Y, prepro=self.filter_type)
+
+        raw_sensor_size = self.viewer.get_sensor_size()
+        self.new_sensor_size = ((raw_sensor_size[0] - crop_Y) * raw_sensor_size[1],)
+        self.observation_space = gym.spaces.Box(low=0, high=255, shape=self.new_sensor_size, dtype=np.uint8)
+
+        if self.log:
+            i = 0
+            directory_path = f"log_img/log_{filter_type}_{i}"
+            while os.path.isdir(directory_path):
+                i += 1
+                directory_path = f"log_img/log_{filter_type}_{i}"
+                print("new dir")
+            os.makedirs(directory_path)
+            self.log_dir = directory_path
+
+    def step(self, action):
+        # print("step")
+        self.nbr_img += 1
+        obs, reward, done, info = self.env.step(action)
+        processed_obs = self.prepro.run(obs[:, :, ::-1])[1]
+        if processed_obs.shape[2] == 3:
+            processed_obs = cv2.cvtColor(processed_obs, cv2.COLOR_RGB2GRAY)
+        # print("SHAPE 2 : ", processed_obs.shape)
+        if self.log:
+            img_to_save = f"/img_{self.nbr_img}.jpg"
+            path = self.log_dir + img_to_save
+            cv2.imwrite(path, processed_obs)
+        return processed_obs.flatten(), reward, done, info
+
+    def reset(self):
+        obs = self.env.reset()
+        processed_obs = self.prepro.run(obs[:, :, ::-1])[1]
+        if processed_obs.shape[2] == 3:
+            processed_obs = cv2.cvtColor(processed_obs, cv2.COLOR_RGB2GRAY)
+        return processed_obs.flatten()
+
+
+class CNNPrepro(gym.Wrapper):
+
+    def __init__(self, env: gym.Env, crop_Y, filter_type, log, epaisseur):
+        assert isinstance(env.observation_space, gym.spaces.Box)
+        super(CNNPrepro, self).__init__(env)
+        self.crop_Y = crop_Y
+        self.filter_type = filter_type
+        self.log = log
+        self.epaisseur = epaisseur
+        print("LOG : ", self.log)
+        print("Filter type : ", self.filter_type)
+        print("CropY : ", self.crop_Y)
+        print("epaisseur : ", self.epaisseur)
+        self.nbr_img = 0
+        self.prepro = Preprocessing(cropped_from_top=self.crop_Y, prepro=self.filter_type, epaisseur=self.epaisseur)
+
+        raw_sensor_size = self.viewer.get_sensor_size()
+        self.new_sensor_size = ((raw_sensor_size[0] - crop_Y), raw_sensor_size[1],1)
+        self.observation_space = gym.spaces.Box(low=0, high=255, shape=self.new_sensor_size, dtype=np.uint8)
+
+        if self.log:
+            i = 0
+            directory_path = f"log_img/log_{filter_type}_{i}"
+            while os.path.isdir(directory_path):
+                i += 1
+                directory_path = f"log_img/log_{filter_type}_{i}"
+                print("new dir")
+            os.makedirs(directory_path)
+            self.log_dir = directory_path
+
+    def step(self, action):
+        # print("step")
+        self.nbr_img += 1
+        obs, reward, done, info = self.env.step(action)
+        processed_obs = self.prepro.run(obs[:, :, ::-1])[1]
+        processed_obs = processed_obs.reshape(self.new_sensor_size)
+        # print("SHAPE 2 : ", processed_obs.shape)
+        if self.log:
+            img_to_save = f"/img_{self.nbr_img}.jpg"
+            path = self.log_dir + img_to_save
+            cv2.imwrite(path, processed_obs)
+        return processed_obs, reward, done, info
+
+    def reset(self):
+        obs = self.env.reset()
+        processed_obs = self.prepro.run(obs[:, :, ::-1])[1]
+        processed_obs = processed_obs.reshape(self.new_sensor_size)
+        return processed_obs
+
+
 class PreProcessingWrapper(gym.Wrapper):
     """
     PreProcess the img received by the camera for better learning rate
@@ -472,7 +610,7 @@ class PreProcessingWrapper(gym.Wrapper):
         self.nbr_img = 0
         self.log_activated = log_activated
         self.random_nbr = random.randint(0, 10000)
-        self.normalize = normalize
+        self.normalize = False
         # Overwrite the observation space
         raw_sensor_size = self.viewer.get_sensor_size()
         # new_sensor_size = (int(raw_sensor_size[0] * (crop_ratio / 100 - 0.1)), raw_sensor_size[1], raw_sensor_size[2])
@@ -481,7 +619,8 @@ class PreProcessingWrapper(gym.Wrapper):
                 int(raw_sensor_size[0] * (crop_ratio / 100 - 0.1)) * raw_sensor_size[1] * raw_sensor_size[2],)
             self.observation_space = gym.spaces.Box(low=0, high=1, shape=new_sensor_size, dtype=np.float32)
         else:
-            new_sensor_size = (int(raw_sensor_size[0] * (crop_ratio / 100 - 0.1)),raw_sensor_size[1],raw_sensor_size[2])
+            new_sensor_size = (
+            int(raw_sensor_size[0] * (crop_ratio / 100 - 0.1)), raw_sensor_size[1], raw_sensor_size[2])
             self.observation_space = gym.spaces.Box(low=0, high=255, shape=new_sensor_size, dtype=np.uint8)
 
     def step(self, action):
@@ -523,12 +662,13 @@ class SteeringSmoothingWrapper(gym.Wrapper):
         if self.past_action is None:
             self.past_action = np.zeros_like(action)
         else:
-            reward_loss = self.smoothing_coef * (action[0]-self.past_action[0])/action[0]
+            reward_loss = self.smoothing_coef * (action[0] - self.past_action[0]) / action[0]
             reward = reward - abs(reward_loss * reward)
-            if reward < -1.0 :
+            if reward < -1.0:
                 reward = -1.0
             self.past_action = action
         return obs, reward, done, info
+
 
 class ActionSmoothingWrapper(gym.Wrapper):
     """
@@ -558,8 +698,8 @@ class ActionSmoothingWrapper(gym.Wrapper):
         return self.env.step(self.smoothed_action)
 
 
-class PastThrottle(gym.Wrapper) :
-    def __init__(self, env: gym.Env,length=5,auto_encoder_size = 32):
+class PastThrottle(gym.Wrapper):
+    def __init__(self, env: gym.Env, length=5, auto_encoder_size=32):
         super().__init__(env)
         self.autoencodersize = auto_encoder_size
         self.length = length
@@ -570,6 +710,7 @@ class PastThrottle(gym.Wrapper) :
             shape=(self.length + self.autoencodersize,),
             dtype=np.float32,
         )
+
     def reset(self) -> np.ndarray:
         obs = self.env.reset()
         self.past_throttle = np.zeros(self.length)
@@ -580,16 +721,18 @@ class PastThrottle(gym.Wrapper) :
         obs, reward, done, infos = self.env.step(action)
         last_throttle = action[1]
         self.past_throttle = np.insert(self.past_throttle, 0, last_throttle, axis=0)
-        self.past_throttle = np.delete(self.past_throttle,self.length)
+        self.past_throttle = np.delete(self.past_throttle, self.length)
         new_obs = np.concatenate([obs, self.past_throttle])
 
         return new_obs.flatten(), reward, done, infos
 
-class Deadzone(gym.Wrapper) :
-    def __init__(self, env: gym.Env,deadzone = 0.15):
+
+class Deadzone(gym.Wrapper):
+    def __init__(self, env: gym.Env, deadzone=0.15):
         super().__init__(env)
         self.deadzone = deadzone
+
     def step(self, action: np.ndarray):
-        if action[1] <= self.deadzone :
+        if action[1] <= self.deadzone:
             action[1] = 0
         return self.env.step(action)
