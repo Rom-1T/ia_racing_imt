@@ -19,21 +19,27 @@ class AutoencoderWrapper(gym.Wrapper):
     """
 
     def __init__(self, env: gym.Env, ae_path: str = "/home/rom1/Documents/ia_racing_imt/rl-baselines3-zoo/aae-train-donkeycar/auto-encoder-agent/ae-32_400.pkl",
-                 filter="edge",epaisseur = 1,degrade = True, degradation = None):
+                 filter="edge",epaisseur = 1,degrade = False, log = True):
         super().__init__(env)
         self.init_time = time.time()
-        self.autoencoder = load_ae("/home/rom1/Documents/ia_racing_imt/rl-baselines3-zoo/aae-train-donkeycar/auto-encoder-agent/models/ae-32_lines_2_V2.pkl")
+        #self.autoencoder = load_ae("/home/rom1/Documents/ia_racing_imt/rl-baselines3-zoo/aae-train-donkeycar/auto-encoder-agent/models/ae-32_cam2_edge2.pkl")
+        self.autoencoder = load_ae(ae_path)
         self.observation_space = gym.spaces.Box(
             low=-np.inf,
             high=np.inf,
             shape=(self.autoencoder.z_size,),
             dtype=np.float32,
         )
-        self.filter = "lines"
-        self.degradation = False
-        self.log = True
-        self.epaisseur = 1
+        self.filter = filter
+        self.degradation = degrade
+        self.log = log
+        self.epaisseur = epaisseur
         name = "data_test"
+        print("AE Path : ", ae_path)
+        print("degrade : ", self.degradation)
+        print("Filter : ", self.filter)
+        print("Epaisseur :  ", self.epaisseur)
+        print("LOG : ", self.log)
         if self.log :
             self.nbr_img = 0
             i = 0
@@ -110,10 +116,10 @@ class AutoencoderWrapper(gym.Wrapper):
                 cv2.imwrite(self.log_dir + line_to_save,filtered )
         else :
             encoded_image = self.autoencoder.encode_from_raw_image(raw_img)
-        # if self.log :
-        #     img_to_save = f"/img_ae_{self.nbr_img}.jpg"
-        #     path = self.log_dir + img_to_save
-        #     cv2.imwrite(path, self.autoencoder.decode(encoded_image)[0])
+        if self.log :
+            img_to_save = f"/img_ae_{self.nbr_img}.jpg"
+            path = self.log_dir + img_to_save
+            cv2.imwrite(path, self.autoencoder.decode(encoded_image)[0])
         # reconstructed_image = self.autoencoder.decode(encoded_image)[0]
         # cv2.imshow("Original", obs[:, :, ::-1])
         # cv2.imshow("Filtered", filtered)

@@ -11,6 +11,7 @@ from scipy.signal import iirfilter, sosfilt, zpk2sos
 from stable_baselines3 import SAC
 from stable_baselines3.common.vec_env.base_vec_env import VecEnv, VecEnvObs, VecEnvStepReturn, VecEnvWrapper
 import cv2
+from gym.spaces import Tuple, Discrete
 
 
 class Preprocessing():
@@ -40,8 +41,19 @@ def lines(img, edges):
                 cv2.polylines(img, [pts], True, (255, 0, 0), 3)
     return cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
 
+def final_filter(image):
+    image = cv2.GaussianBlur(image, (5, 5), 0)
+    threshold = cv2.adaptiveThreshold(image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 15, 5)
+    otsu_threshold, image_result = cv2.threshold(
+        image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU,
+    )
+    filter = cv2.addWeighted(threshold, 1, image_result, 0.5, 0.0)
+    return (filter)
+
 def processing_line_v2(image, mode="edge", epaisseur=1):
     edge_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    if mode == "final_filter":
+        return final_filter(edge_image)
     edge_image = cv2.GaussianBlur(edge_image, (3, 3), 1)
     edge_image = cv2.Canny(edge_image, 150, 200, apertureSize=3)
     edge_image = cv2.dilate(
@@ -736,3 +748,54 @@ class Deadzone(gym.Wrapper):
         if action[1] <= self.deadzone:
             action[1] = 0
         return self.env.step(action)
+
+class DiscreteSpace(gym.Wrapper):
+    def __init__(self, env: gym.Env, n=10):
+        super().__init__(env)
+
+        num_actions = n
+        action_space = gym.spaces.Discrete(num_actions)
+        # Encapsuler l'environnement gym.Box avec TimeLimit et FlattenObservation
+        env_discrete = gym.wrappers.TimeLimit(
+            gym.wrappers.FlattenObservation(env),
+            max_episode_steps=env.spec.max_episode_steps
+        )
+        # Redimensionner les actions entre -1 et 1 avec RescaleAction
+        min_action, max_action = env.action_space.low[0], env.action_space.high[0]
+        env_discrete = gym.wrappers.RescaleAction(env_discrete, min_action, max_action)
+        # Changer l'espace d'action de l'environnement en l'espace d'action discret
+        env_discrete.action_space = action_space
+        self.action_space = env_discrete.action_space
+
+    # def step(self,action):
+    #     discrete_action = np.array([np.digitize(action[i], self.bins[i]) - 1 for i in range(0,2)])
+    #     return self.env.step(discrete_action)
+
+
+class DonkeyCarDiscreteWrapper(gym.Wrapper):
+
+    def __init__(self, env,num_actions):
+        super().__init__(env)
+
+        # Modifie l'espace de l'environnement en discret
+        self.observation_space = Discrete(5)
+        self.action_space = Tuple((Discrete(3), Discrete(3)))
+
+    def step(self, action):
+        # Convertit l'action de la forme (direction, vitesse) en une action discrète unique
+        discrete_action = action[0] * 3 + action[1]
+
+        # Exécute une étape de l'environnement avec l'action discrète
+        obs, reward, done, info = self.env.step(discrete_action)
+
+        # Modifie l'observation en un nombre discret pour la sortie
+        obs = int(obs[0] * 4)
+
+        # Convertit l'action discrète renvoyée par l'environnement en une action de la forme (direction, vitesse)
+        direction = discrete_action // 3
+        speed = discrete_action % 3
+        action = (direction, speed)
+
+        return obs, reward, done, {'action': action}
+
+

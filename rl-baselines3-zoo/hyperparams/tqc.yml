@@ -11,16 +11,17 @@ donkey-sigma-v0:
 ##          horizon: 2
     - utils.wrappers.CNNPrepro:
         crop_Y: 40
-        filter_type: "edge"
+        filter_type: "final_filter"
         log : False
         epaisseur : 2
     - utils.wrappers.Deadzone:
         deadzone: 0.15
-##    - aae-train-donkeycar.ae.wrapper.AutoencoderWrapper:
-##        ae_path: "/home/rom1/Documents/ia_racing_imt/rl-baselines3-zoo/aae-train-donkeycar/auto-encoder-agent/models/ae-32_edge_1_V2.pkl"
-##        filter : "edge"
-##        degrade : False
-##        epaisseur : 1
+#    - aae-train-donkeycar.ae.wrapper.AutoencoderWrapper:
+#        ae_path: "/home/rom1/Documents/ia_racing_imt/rl-baselines3-zoo/aae-train-donkeycar/auto-encoder-agent/models/ae-32_cam2_edge2.pkl"
+#        filter : "edge"
+#        degrade : False
+#        log : False
+#        epaisseur : 2
 ##    - utils.wrappers.ActionSmoothingWrapper:
 ##        smoothing_coef: 0.5
 ##    - utils.wrappers.PastThrottle:
@@ -48,6 +49,26 @@ donkey-sigma-v0:
 #  use_sde: True
 #  sde_sample_freq: 16
 #  policy_kwargs: "dict(log_std_init=-3, net_arch=[256, 256], n_critics=2)"
+
+
+#  n_timesteps: !!float 2e6
+#  policy: 'CnnPolicy'
+#  learning_rate: !!float 7.3e-4
+#  #learning_rate: !!float 3e-4
+#  buffer_size: 10000
+#  batch_size: 256
+#  ent_coef: 'auto'
+#  gamma: 0.99
+#  tau: 0.02
+#  # train_freq: [1, "episode"]
+#  train_freq: 200
+#  # gradient_steps: -1
+#  gradient_steps: 256
+##  learning_starts: 5000
+##  use_sde_at_warmup: True
+##  use_sde: True
+##  sde_sample_freq: 16
+##  policy_kwargs: "dict(log_std_init=-3, net_arch=[256, 256], n_critics=2)"
 
 donkey-minimonaco-track-v0:
   normalize: "{'norm_obs': False, 'norm_reward': False}"
