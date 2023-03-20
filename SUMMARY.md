@@ -1,3 +1,3 @@
 # Table of contents
 
-* [Preprocessing](README.md)
+* [Integration](README.md)
