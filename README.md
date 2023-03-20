@@ -46,6 +46,22 @@ def final_filter(image) :
 
 This filter might require an optimization in the choice of the parameter in the gaussian threshold.
 
+#### Canny method
+
+The Canny Transform is a multi-step algorithm&#x20;
+
+#### Hough Transform
+
+#### Integration
+
+For the integration, we choose to not choose. We are training our models with variation of each of these filters.&#x20;
+
+* The "edge" filter is basically a Canny Algorithmein which the lines are dilated. This "dilatation" can be modulated with the variable "epaisseur".
+* The "lines" filter is a filter based on the Hough Transform. It is a additional layer to the "edge" filter. It simplifies the image again to only prompt lines.
+* The "final\_filter" is the one that combine the 2 adaptative threshold. It shows good results in reality but is way to sensitive to noises and color changes.
+
+
+
 ### Degrading images
 
 #### Motion blur for the training
@@ -82,7 +98,32 @@ def motion_blur_effect(img,kernel_size=None) :
     return horizonal_mb
 ```
 
-
 ![Original img](img\_example/example\_ori.jpg.jpg) ![Motion blur](img\_example/degraded\_img.jpg)
+
+#### Use Albumentation
+
+This Python library contains different transforms for image augmentation. For a more robust model, we choose to create a function that is applied to the input image. This function will randomly applies one or more transform to the input image.&#x20;
+
+
+
+```
+def degradation(img):
+    x = np.random.randint(10, 25)
+    img = A.RandomSunFlare(flare_roi=(0, 0, 1, 1), num_flare_circles_lower=1, num_flare_circles_upper=3,
+                           src_color=(255, 255, 255), src_radius=x, always_apply=False)(image=img)['image']
+    y = np.random.randint(0, 2)
+    t1 = A.RandomSunFlare(flare_roi=(0, 0, 1, 1), num_flare_circles_lower=1, num_flare_circles_upper=3,
+                          src_color=(255, 255, 255), src_radius=x, always_apply=True)
+    # t2 = A.RandomRain(slant_lower=-10, slant_upper=10, drop_length=20, drop_width=1,drop_color=(255, 255, 255), blur_value=1, brightness_coefficient=1, rain_type=None,always_apply=True)
+    t3 = A.CoarseDropout(max_holes=10, max_height=10, max_width=15, min_holes=1, min_height=1, min_width=1,
+                         fill_value=(255, 255, 255), mask_fill_value=None, always_apply=True)
+    t4_ = A.MotionBlur(blur_limit=(7, 7), always_apply=True)
+    t4 = A.Compose([t4_, t4_])
+    transfos = A.SomeOf([t1, t3, t4], n=y)
+    img = transfos(image=img)['image']
+    return img
+```
+
+The rain effect has been deleted because it was too hard for the model. This function can be tuned by modifying the two values "x" and "y". Increase them will make the degradation harder for the model. This function also contains a motion blur.
 
 ####
