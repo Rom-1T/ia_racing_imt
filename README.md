@@ -137,3 +137,30 @@ Detailed documentation: [https://github.com/DLR-RM/rl-baselines3-zoo](https://gi
 Tutorial: [https://www.youtube.com/watch?v=ngK33h00iBE\&t=4312s](https://www.youtube.com/watch?v=ngK33h00iBE\&t=4312s)
 
 This is the framework we used to train and use the model. The biggest workload is tuning the hyperparameters and creating the _Gym Wrappers._
+
+### Autoencoder
+
+Detailed documentation: [https://github.com/araffin/aae-train-donkeycar/tree/feat/live-twitch-2](https://github.com/araffin/aae-train-donkeycar/tree/feat/live-twitch-2)
+
+An autoencoder is a type of neural network that is commonly used for unsupervised learning. The basic idea behind an autoencoder is to learn a compressed representation of the input data that captures the most important information in the data.
+
+An autoencoder consists of two main parts: an encoder and a decoder. The encoder takes the input data and transforms it into a compressed representation, typically a lower-dimensional vector or matrix. The decoder then takes this compressed representation and transforms it back into the original input data.
+
+During training, the autoencoder is trained to minimize the difference between the input data and the reconstructed output data. This is typically done by minimizing the mean squared error or some other distance metric between the input and output data.
+
+Here are a few reasons why we use an AE :&#x20;
+
+1. Data Compression: Autoencoders can be used to compress the raw image data from your Donkey Car's camera into a lower-dimensional representation, which can reduce the amount of data that needs to be processed and transmitted during training and inference. This can be especially useful when working with limited computing resources or low-bandwidth communication channels.
+2. Feature Extraction: The compressed representation learned by an autoencoder can also be used as a feature vector for training a downstream model, such as a classifier or a regression model. By learning a compact and informative representation of the input data, autoencoders can help improve the performance of these models, especially when working with high-dimensional data such as images.
+3. Data Augmentation: Autoencoders can also be used to generate new data that is similar to the original input data. This can be useful for data augmentation, where the goal is to increase the size of the training dataset by generating new samples with small variations from the original data. This can help improve the generalization performance of your Donkey Car AI model by reducing overfitting to the limited training data.
+4. Denoising: Autoencoders can also be used to denoise corrupted data by reconstructing the original signal from noisy or incomplete measurements. This can be especially useful in situations where the input data is subject to noise or other forms of corruption, such as in low-light or high-speed driving conditions.
+
+### Integration in the raspberry pi
+
+#### Creation of new parts
+
+#### Modification of manage.py
+
+#### Modification of myconfig.py
+
+<figure><img src=".gitbook/assets/pi_process.jpg" alt=""><figcaption><p>Process of the raspberry pi simplfied</p></figcaption></figure>
