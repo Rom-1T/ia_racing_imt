@@ -57,7 +57,7 @@ Le Javascript est aussi une ressource statique et il est intéressant de modifie
 
 > __Note__ :
 
-	Attention : après une modification du fichier main.js, il faut penser à vider le cache pour pouvoir observer l’effet de ses modifications.
+> Attention : après une modification du fichier main.js, il faut penser à vider le cache pour pouvoir observer l’effet de ses modifications.
 
 **main.js** crée un objet driveHandler qui permet de gérer tout le drive :
 
