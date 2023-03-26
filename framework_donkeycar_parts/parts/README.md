@@ -55,7 +55,7 @@ Le CSS utilisé pour rendre agréable l’interface visuelle est une ressource s
 
 Le Javascript est aussi une ressource statique et il est intéressant de modifier le fichier main.js pour ajouter des données entrantes ou sortantes sur l’interface.
 
-> __Note__\ Attention : après une modification du fichier main.js, il faut penser à vider le cache pour pouvoir observer l’effet de ses modifications.
+> __Warning__ : Attention : après une modification du fichier main.js, il faut penser à vider le cache pour pouvoir observer l’effet de ses modifications.
 
 **main.js** crée un objet driveHandler qui permet de gérer tout le drive :
 
