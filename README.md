@@ -75,7 +75,8 @@ The final step is to apply hysteresis thresholding. This involves selecting two 
 The result of Canny Edge detection is a binary image where the white pixels represent the edges in the original image
 
 ![Cropped](examples/reel/cropped.jpg) ![Canny](examples/reel/canny_reel.jpg)
-![Cropped](examples/simu/cropped_simu.jpg) ![Canny](examples/reel/canny_simu.jpg)
+
+![Cropped](examples/simu/cropped_simu.jpg) ![Canny](examples/simu/canny_simu.jpg)
 
 ```
 def canny(image,epaisseur=1):
