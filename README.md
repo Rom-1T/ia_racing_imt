@@ -14,7 +14,7 @@ Here are the steps to install Raspbian OS Lite on a fresh Raspberry Pi 4B:
 sudo apt-get update && sudo apt-get upgrade
 ```
 
-6. Configure the network settings. If you are using a wired connection, you should already be connected to the network. If you are using a wireless connection, you need to configure the network settings using the "wpa\_supplicant.conf" file. :&#x20;
+6. Configure the network settings. If you are using a wired connection, you should already be connected to the network. If you are using a wireless connection, you need to configure the network settings using the "wpa\_supplicant.conf" file. :
 
 Run the following command to edit the "wpa\_supplicant.conf" file:
 
@@ -62,6 +62,38 @@ Installing PyTorch on a Raspberry Pi 4 can be a little challenging. In our case,
 Try : [https://github.com/Kashu7100/pytorch-armv7l](https://github.com/Kashu7100/pytorch-armv7l) or [https://github.com/sungjuGit/PyTorch-and-Vision-for-Raspberry-Pi-4B](https://github.com/sungjuGit/PyTorch-and-Vision-for-Raspberry-Pi-4B)
 
 An other solution would have been to compile PyTorch from source. (HARD)
+
+#### Installing Tensorflow & CUDA
+
+Tensorflow est la bibliothèque pemettrant l’utilisation des réseaux de neurones implémentés dans DonkeyCar et CUDA permet d’utiliser le GPU d’un ordinateur et ainsi réduire drastiquement les temps de calcul pour les entraînements (2 à 3 fois moins de temps observé). Il faut pour cela avoir une carte NVIDIA disponible.
+
+L’installation est relativement laborieuse donc voici une explication de la procédure à réaliser pour installer ces deux modules.
+
+**Tensorflow**
+
+Donkeycar a été prévu pour fonctionner avec Tensorflow **2.2** mais des versions plus récentes peuvent être utilisées. Cependant, avec Windows, la version **2.10** de Tensorflow était la dernière version permettant l’utilisation du GPU:&#x20;
+
+{% embed url="https://www.tensorflow.org/install/pip?hl=fr#windows-native" %}
+
+Il faudra donc installer une version égale ou inférieure à la version **2.10** pour utiliser CUDA avec Windows.
+
+On peut installer Tensorflow avec la commande:
+
+`pip install tensorflow==<version>`
+
+**CUDA**
+
+En fonction de la version Tensorflow installée, il faudra installer la version de CUDA compatible. Ceci est disponible sur le site de Tensorflow:
+
+[https://www.tensorflow.org/install/source\_windows?hl=fr](https://www.tensorflow.org/install/source\_windows?hl=fr)
+
+Il faudra également installé tous les pilotes et bibliothèques décrits dans le guide d’installation de CUDA (voir configuration logicielle requise) :&#x20;
+
+[https://www.tensorflow.org/install/gpu?hl=fr#windows\_setup](https://www.tensorflow.org/install/gpu?hl=fr#windows\_setup)
+
+Si certaines bibliothèques ne sont pas prises en compte, il faudra ajouter leur chemin dans les variables du système (Panneau de configuration - Modifier les variables d'environnement  - Variables d’environnement) comme décrit dans le guide.
+
+Pour savoir si l’installation de CUDA est effective il faudra prêter attention aux erreurs éventuelles affichées lors du lancement d’un entraînement et surveiller l’utilisation du GPU. Certaines bibliothèques supplémentaires peuvent être nécessaires comme la bibliothèque _zlib_.
 
 #### Create the parts
 
