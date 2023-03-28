@@ -4,11 +4,19 @@ There are 2 reasons why the model requires preprocessing the input image of the 
 
 ### Image cleaning
 
+#### Image Cropping
+
+It remove unwanted part of the image.
+
+![Original img](file/reel.jpg) ![Cropped](examples/reel/cropped.jpg)
+![Original img](file/simu.jpg) ![Cropped](examples/simu/cropped_simu.jpg)
+
 #### Gaussian blur
 
 This is a common first step as gaussian blur is usually typically to reduce image noise and reduce detail. This step is very important in real camera image as the camera creates a lot of noise.
 
-![Original img](img\_example/example\_ori.jpg.jpg) ![Gaussian blur](img\_example/gaussian\_blur.jpg)
+![Cropped](examples/reel/cropped.jpg) ![Gaussian blur](examples/reel/gaussian_blur_reel.jpg)
+![Cropped](examples/simu/cropped_simu.jpg) ![Gaussian blur](examples/reel/gaussian_blur_simu.jpg)
 
 #### Enhancing image features
 
@@ -18,19 +26,22 @@ For faster learning, the AI model can be imputed with images with enhanced featu
 
 The threshold value is the weighted sum of neighborhood values where weights are a gaussian window. In our case, this technique enhances lines because they are the frontier between a black element (the road) and a white element (the lines). From experience, this method gives us better results than Laplace edge detecting because the obtained image is less complex with wider lines. The problem is that we lost a lot of information. In fact, this technique is good to detect the border of the path but as it suppresses a lot of information, the model could be lost easily.
 
-![Gaussian blur](img\_example/gaussian\_blur.jpg) ![Gaussian thresholding](img\_example/gaussian\_threshold.jpg)
+![Cropped](examples/reel/cropped.jpg) ![Gaussian Threshold](examples/reel/gaussian_thresh_reel.jpg)
+![Cropped](examples/simu/cropped_simu.jpg) ![Gaussian Threshold](examples/reel/gaussian_thresh_simu.jpg)
 
 #### Otsu adaptive thresholding
 
 Otsu’s method is an adaptive thresholding way for binarization in image processing. It can find the optimal threshold value of the input image by going through all possible threshold values (from 0 to 255). In our case, we needed to binarize the input image as the road is black and the line are white. This means otsu will separate two related data, for example, the road and the lines. The problem of this method is that it also enhances details and noise as everything becomes either completely black or completly white. For example, a light reflection on the road which was not very bright in the original image become as white as the lines (255)
 
-![Gaussian blur](img\_example/gaussian\_blur.jpg) ![Otsu thresholding](img\_example/otsu\_treshold.jpg)
+![Cropped](examples/reel/cropped.jpg) ![Otsu Threshold](examples/reel/otsu_thresh_reel.jpg)
+![Cropped](examples/simu/cropped_simu.jpg) ![Otsu Threshold](examples/reel/otsu_thresh_simu.jpg)
 
 #### "Final filter" (Not final :o )
 
 The idea of the filter is to superpose a gaussian thresholding and an otsu thresholding to keep effective details while enhancing the border.
 
-![Original img](img\_example/example\_ori.jpg.jpg) ![Final filter](img\_example/final\_filter.jpg)
+![Cropped](examples/reel/cropped.jpg) ![Final Filter](examples/reel/final_filter_reel.jpg)
+![Cropped](examples/simu/cropped_simu.jpg) ![Final Filter](examples/reel/final_filter_simu.jpg)
 
 ```
 def final_filter(image) :
@@ -58,6 +69,27 @@ The final step is to apply hysteresis thresholding. This involves selecting two 
 
 The result of Canny Edge detection is a binary image where the white pixels represent the edges in the original image
 
+![Cropped](examples/reel/cropped.jpg) ![Canny](examples/reel/canny_reel.jpg)
+![Cropped](examples/simu/cropped_simu.jpg) ![Canny](examples/reel/canny_simu.jpg)
+
+```
+def canny(image,epaisseur=1):
+    edge_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    edge_image = cv2.GaussianBlur(edge_image, (3, 3), 1)
+    edge_image = cv2.Canny(edge_image, 150, 200, apertureSize=3)
+    edge_image = cv2.dilate(
+        edge_image,
+        cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5)),
+        iterations=epaisseur
+    )
+    edge_image = cv2.erode(
+        edge_image,
+        cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5)),
+        iterations=epaisseur
+    )
+    return edge_image
+```
+
 #### Hough Transform
 
 The basic idea behind the Hough Transform is to convert an image in its pixel representation into a parameter space representation, where the parameters of the image features can be represented as points. For example, in the case of line detection, the Hough Transform can be used to represent all possible lines that can pass through a set of points in the image as points in a parameter space.
@@ -70,6 +102,9 @@ The Hough Transform works in the following way:
 4. Convert the maximum value in the accumulator array back to image coordinates to identify the image feature.
 
 In our solution, we apply the Hough Transform to the Canny output.
+
+![Cropped](examples/reel/cropped.jpg) ![Canny](examples/reel/hough_reel.jpg)
+![Cropped](examples/simu/cropped_simu.jpg) ![Canny](examples/reel/hough_simu.jpg)
 
 ```
 // Function that applies the Hough Transform
