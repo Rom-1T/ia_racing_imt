@@ -69,6 +69,38 @@ Identification des fonctions de la voiture
 - Même si la diode de l’interrupteur s’allume avec l’alimentation de la voiture, cela ne suffit pas à l’ouvrir et le fermer, il faut donc bien du 12V en entrée (pour cela il faut soit une pile soit un amplificateur de puissance)
 
 
+
+## Ajout d'un controlleur - manette
+
+Il est possible de connecter plusieurs types de manette de jeu à la voiture. Une [section de la documentation](https://docs.donkeycar.com/parts/controllers/) est dédiée à ce sujet. Lors de ce projet, nous  avons connecté une manette de PS4 à la voiture.
+
+##### Avantages à connecter sa propre manette :
+- Meilleur contrôle sur les joysticks (notamment pour la vitesse)
+- Meilleures sensations (confort)
+
+##### Inconvénients à connecter sa propre manette :
+- La manette se connecte en bluetooth (contrairement à celle fournie qui fonctionne en bluetooth avec un plug USB)
+- Le processus de connexion de la manette peut être un peu fastidieux si la manette a été connectée à un autre appareil entre 2 connexions à la voiture. Dans ce cas, il faut supprimer l’appairage et recommencer un nouvel appairage.
+
+##### Tips 
+- Penser à bien noter l’adresse MAC de la manette à sa première connexion (évitera de re scanner pour les connexions ultérieures)
+
+### Connecter une manette
+
+Il n'y a rien à ajouter à la [documentation](https://docs.donkeycar.com/parts/controllers/) qui détaille très bien cette section.
+
+### Supprimer une manette
+Lorsqu'une manette a été connectée sur un autre périphérique après avoir été connecté à la voiture, il est laborieux de la reconnecter. Le plus simple est de supprimer l'appairage de la manette et de la reconnecter.
+
+1. Se connecter à la voiture en ssh
+2. Dans le terminal, taper ```bluetoothctl```.
+3. *(Facultatif si on connaît déjà l'adresse MAC de la manette)* Pour voir les appareils connectés antérieurement, taper ```paired-devices```.
+4. Pour déconnecter la manette, taper ```remove aa:bb:cc:dd:ee:ff``` où ```aa:bb:cc:dd:ee:ff``` est l’adresse MAC de la manette.
+
+Il est alors possible de refaire la connexion à la manette.
+
+
 ## Voir ensuite
 
 - Installer l'OS de la Raspberry
+
