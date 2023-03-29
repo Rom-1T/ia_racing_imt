@@ -61,20 +61,20 @@ Here are the steps to authenticate yourself in ssh:
 2. You need to be connected on the same network as you Raspberry is. If there is no wifi set, then you can connect your computer to the Raspberry by mean of an ethernet wire.
 3. Check if the Raspberry Pi is on the network by typing:
 
-	```bash
+	```
 	ping imtaracing.local
 	```
 	(here *imtaracing* is the name of our Raspberry).
 	
 4. Connect to the Raspberry in SSH with the access you previously defined by typing:
 
-	```bash
+	```
 	ssh <user>@<host>.local
 	```
 	
 	in our case:
 	
-	```bash
+	```
 	ssh pi@imtaracing.local
 	```
 
