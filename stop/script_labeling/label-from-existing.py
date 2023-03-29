@@ -1,6 +1,5 @@
 import os, shutil, json
 
-# datasetsDir = './stop/new_dataset/train'
 dossier_a_rapatrier = './stop/validation_dataset_sigma/'
 dirs = []
 labels = []
