@@ -12,10 +12,13 @@ labels = json.loads(labelsFile.read());
 if not(targetDir in labels.keys()):
     labels[targetDir] = {};
 
+
 batchN = int(len(labels[targetDir]) / 20) + 1;
 if len(labels[targetDir]) / 20 < 1: 
     batchN = 0;
 nameWithoutPrefix = "_cam-image_array_.jpg";
+
+############# DÉBUT DE LABELLISATION DES IMAGES UNE À UNE #############
 
 # for c in range(batchN*20, (batchN+1)*20):
 #     fig = plt.figure()
@@ -27,10 +30,15 @@ nameWithoutPrefix = "_cam-image_array_.jpg";
 #         yn = input("Ligne de stop ? - " + str(c));
 #         labels[targetDir][str(c) + nameWithoutPrefix] = 1 if yn == "y" else 0;
 
+############# FIN DE LABELLISATION DES IMAGES UNE À UNE #############
+
+############# DÉBUT DE LABELLISATION MASSIVE DES IMAGES #############
+
 for c in range(1760, 1900):
     labels[targetDir][str(c) + nameWithoutPrefix] = 0;
+    
+############# FIN DE LABELLISATION MASSIVE DES IMAGES #############
 
-# print(labels)
 labelsJSON = json.dumps(labels);
 
 f = open("labels.json", "w")
