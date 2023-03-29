@@ -54,7 +54,7 @@ Les données d'entrée sont à renseigner à travers la définition de constante
 - ```BATCH_SIZE_TRAIN``` : Indique la taille des lots pour l'entrainement
 - ```BATCH_SIZE_VALIDATE``` : Indique la taille des lots pour la validation
 
-THRESHOLD : Indique le seuil de confiance que l'on souhaite pour considérer la présence d'une ligne
+- ```THRESHOLD``` : Indique le seuil de confiance que l'on souhaite pour considérer la présence d'une ligne
 
 #### Données de sortie
 
@@ -150,4 +150,81 @@ print("   Erreurs :", n['errors']['should_be_1'])
 print("   Réussites :", n['successes']['is_1'])
 
 print(e) # Nombre d'erreurs au total
+```
+
+## Stop par plage de couleur (déterministe)
+
+### Formalisation
+Pour la détection de la ligne de stop de manière déterministe, on utilise la représentation de couleur HSV.
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/HSV_color_solid_cylinder.png/800px-HSV_color_solid_cylinder.png)
+
+Grâce à cette représentation, on peut définir des bornes hautes et basses de couleur et rechercher les plages de couleurs comprises entre ces bornes.
+
+> __Warning__ : en raison des conditions d'éclairage, les couleurs hautes et basses sont susceptibles d'évoluer d'une course à une autre. Il faut donc également établir un protocole de calibrage.
+
+### ```stop-hsv.py```
+
+Le fichier ```stop-hsv.py``` cherche à vérifier sur un dataset si la ligne de stop est bien détectée pour des valeurs de jaune haute et basse.
+
+#### Prérequis
+Installation de OpenCV.
+
+> __Warning__ : OpenCV ouvre les images en BGR et non RGB par défaut. Dans le cas de la voiture, les images acquises seront en RGB.
+
+#### Données d'entrée
+Les données d'entrée sont à renseigner à travers la définition de constantes :
+
+- ```IMG_DIR_SANS``` : Répertoire contenant des images à tester sans ligne de stop
+- ```IMG_DIR_AVEC``` : Répertoire contenant des images à tester avec ligne de stop
+- ```IMWRITE_DIR``` : Répertoire où enregistrer les détections (doit contenir un sous-répertoire *class_0* et un sous-répertoire *class_1* lui-même ayant un sous-répertoire *ignore*)
+
+#### Données de sortie
+
+Les données de sortie sont un aperçu des zones détectées comme étant des lignes de stop dans le dossier défini par ```IMWRITE_DIR```. Dans le sous-répertoire *class_0* sont enregistrées les images où une ligne a été détectée alors qu'il n'y en avait pas. Dans le sous-répertoire *class_1/ignore* sont enregistrées les images où aucune ligne n'a été détectée alors qu'il y en avait une. Dans *class_1* se trouve les détections a priori correctes (il reste à vérifier que la zone détectée est bien la bonne). 
+
+Le script retourne aussi le nombre d'images où une potentielle ligne a été détectée sur le nombre d'images testées.
+
+#### Fonctionnement
+
+On définit les bornes hautes et basses du jaune. Le fichier ```settings/find_hsv_bounds.py``` peut grandement aider.
+
+```python
+lower = np.array([30, 53, 74])
+upper = np.array([36, 255, 255])
+```
+
+On ouvre l'image qu'on convertit en HSV.
+
+```python
+video = cv2.imread(os.path.join(IMG_DIR_SANS, image.name))
+
+video = video[40:np.shape(video)[0], :, :]
+img = cv2.cvtColor(video, cv2.COLOR_BGR2HSV) # Converting BGR image to HSV format
+```
+
+On applique un masque à l'image.
+
+```python
+img=cv2.blur(img, (5,5))  # Blur
+
+mask = cv2.inRange(img, lower, upper) # Masking the image to find our color
+
+mask = cv2.erode(mask, None, iterations=4)
+mask = cv2.dilate(mask, None, iterations=4)
+image2 = cv2.bitwise_and(video, video, mask=mask)
+
+mask_contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) # Finding contours in mask image
+```
+
+On représente les zones de détection sur l'image d'origine.
+
+```python
+x, y, w, h = cv2.boundingRect(mask_contour)
+cv2.rectangle(video, (x, y), (x + w, y + h), (0, 0, 255), 3)
+```
+
+On enregistre l'image avec la zone détectée.
+
+```python
+cv2.imwrite(IMWRITE_DIR + "class_0/" + image.name, cv2.cvtColor(video, cv2.COLOR_BGR2RGB))
 ```

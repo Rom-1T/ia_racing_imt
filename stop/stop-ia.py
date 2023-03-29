@@ -1,3 +1,8 @@
+__author__ = "Amaury COLIN"
+__credits__ = "Amaury COLIN"
+__date__ = "2023.12.23"
+__version__ = "1.1.0"
+
 import math
 import time
 import os
@@ -177,7 +182,6 @@ class Classif:
                     preds_batch_i = [[None, None] for k in range(len(dataloader))]
 
                     for i_batch, sample_batched in enumerate(dataloader):
-                    # for inputs, labels in dataloader_train:
                         inputs = sample_batched['image'].to(self.device)
                         labels = sample_batched['label_value'].to(self.device)
                         image_ids = sample_batched['idx'].to(self.device)
@@ -204,10 +208,9 @@ class Classif:
                         print("Loss : ", loss.item())
                         for c in range(len(preds_batch_i[i_batch][0])):
                             n[phase] += 1
-                            # print(f'b{i_batch}-{c}', "L:", float(preds_batch_i[i_batch][1][c]), "P:", float(preds_batch_i[i_batch][0][c]))
+                            
                             if phase == train_dataset_name:
                                 if float(self.decision.binary(preds_batch_i[i_batch][0][c])) != float(preds_batch_i[i_batch][1][c]):
-                                    # print(float(self.decision.binary(preds_batch_i[i_batch][0][c])), float(preds_batch_i[i_batch][1][c]))
                                     errors['train'].append(self.get_dataset(train_dataset_name)['labels'][int(image_ids[c])])
                                 else:
                                     running_corrects += 1
@@ -216,7 +219,6 @@ class Classif:
                                 self.preds_each_epochs[len(self.preds_each_epochs) - 1].append([preds_batch_i[i_batch][0][c], preds_batch_i[i_batch][1][c]])
                                 
                                 if float(self.decision.binary(preds_batch_i[i_batch][0][c])) != float(preds_batch_i[i_batch][1][c]):
-                                    # print('TEST')
                                     errors['eval'].append(self.get_dataset(eval_dataset_name)['labels'][int(image_ids[c])])
                                 else:
                                     running_corrects += 1
