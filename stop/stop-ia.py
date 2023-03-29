@@ -340,7 +340,7 @@ class Classif:
             
         plt.show()
 
-    def test_several_throttles(self, throttles = [0.95]):
+    def test_several_thresholds(self, thresholds = [0.95]):
         fig,ax = plt.subplots()
         
         l, = ax.plot([self.epoch_losses[i] for i in range(len(self.epoch_losses)) if i % 2 == 1], color="red", label="Loss")
@@ -350,10 +350,10 @@ class Classif:
         
         ax2=ax.twinx()
         ax2.set_xlabel("Accuracy")
-        print(throttles)
-        for throttle in throttles:
-            print(throttle)
-            decidator = Decision(float(throttle))
+        print(thresholds)
+        for threshold in thresholds:
+            print(threshold)
+            decidator = Decision(float(threshold))
             epoch_accs = []
             for preds_epoch in self.preds_each_epochs:
                 running_corrects = 0
@@ -363,7 +363,7 @@ class Classif:
                 epoch_accs.append(running_corrects / len(preds_epoch))
             print(epoch_accs)
             e, = ax2.plot(epoch_accs)
-            e.set_label('Thr' + str(throttle))
+            e.set_label('Thr' + str(threshold))
         ax2.legend() 
         plt.show()
                 
@@ -384,7 +384,7 @@ class Classif:
         with torch.no_grad():
             outputs = self.model(image.to(self.device))
             print(float(outputs[0]), outputs)
-            output_label = 1 if THROTTLE < float(outputs[0]) else 0
+            output_label = 1 if THRESHOLD < float(outputs[0]) else 0
             
         return (orig_image, output_label)
         
@@ -397,11 +397,11 @@ class Classif:
 
 
 class Decision():
-    def __init__(self, throttle) -> None:
-        self.throttle = throttle
+    def __init__(self, threshold) -> None:
+        self.threshold = threshold
     
     def binary(self, value):
-        if value > self.throttle:
+        if value > self.threshold:
             return 1
         return 0
 
@@ -417,7 +417,7 @@ if __name__ == "__main__":
     BATCH_SIZE_TRAIN = 10
     BATCH_SIZE_VALIDATE = 10
     
-    THROTTLE = 0.9
+    THRESHOLD = 0.9
     
     if not(MODELE_ENREGISTRE):
         m = models.resnet18(pretrained=True)
@@ -436,8 +436,6 @@ if __name__ == "__main__":
         c.set_optimizer(optim.SGD(c.model.parameters(), lr=0.001, momentum=0.9))
         c.scheduler = lr_scheduler.StepLR(c.optimizer, step_size=7, gamma=0.1)
 
-    
-
         c.set_dataset('TRAIN', ROOT_DIR + 'dataset_sigma_crop/train', data_batch_size=BATCH_SIZE_TRAIN)
         c.set_dataset('TEST', ROOT_DIR + 'dataset_sigma_crop/test', data_batch_size=BATCH_SIZE_TRAIN)
     
@@ -447,7 +445,7 @@ if __name__ == "__main__":
     if not(MODELE_ENREGISTRE):
         c.train('TRAIN', 'TEST', N_EPOCHS)
         # c.show_stats()
-        c.test_several_throttles([0.1, 0.3, 0.5, 0.8, 0.9, 0.95, 0.99])
+        c.test_several_thresholds([0.1, 0.3, 0.5, 0.8, 0.9, 0.95, 0.99])
     
     if ENREGISTRER_MODELE:
         c.save(ROOT_DIR + MODELE_NAME)
