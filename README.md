@@ -1,6 +1,6 @@
 # Integration
 
-#### Install Raspbian Os Lite
+## Install Raspbian Os Lite
 
 Here are the steps to install Raspbian OS Lite on a fresh Raspberry Pi 4B:
 
@@ -51,11 +51,38 @@ sudo systemctl restart ssh
 
 That's it! You now have a fresh installation of Raspbian OS Lite on your Raspberry Pi 4.
 
-#### Installing Donkey Car and preparing the env
+## Connect to the Raspberry
+
+To connect to the Raspberry, you may use ssh protocol. Ssh is an easy way to get access to the Raspberry Pi from your computer as if you were using the Raspberry directly connected to a screen. Therefore, you can use the terminal in the same way.
+
+Here are the steps to authenticate yourself in ssh:
+
+1. Switch on the Raspberry Pi.
+2. You need to be connected on the same network as you Raspberry is. If there is no wifi set, then you can connect your computer to the Raspberry by mean of an ethernet wire.
+3. Check if the Raspberry Pi is on the network by typing:
+
+	```bash
+	ping imtaracing.local
+	```
+	(here *imtaracing* is the name of our Raspberry).
+	
+4. Connect to the Raspberry in SSH with the access you previously defined by typing:
+
+	```bash
+	ssh <user>@<host>.local
+	```
+	
+	in our case:
+	
+	```bash
+	ssh pi@imtaracing.local
+	```
+
+## Installing Donkey Car and preparing the env
 
 Go to [https://docs.donkeycar.com/guide/robot\_sbc/setup\_raspberry\_pi/](https://docs.donkeycar.com/guide/robot\_sbc/setup\_raspberry\_pi/)
 
-#### Installing PyTorch
+## Installing PyTorch
 
 Installing PyTorch on a Raspberry Pi 4 can be a little challenging. In our case, we downloaded a wheel version of Torch 1.7.0. It is clearly not the latest version of PyTorch, but it is the easiest way of installing PyToch.
 
@@ -63,7 +90,7 @@ Try : [https://github.com/Kashu7100/pytorch-armv7l](https://github.com/Kashu7100
 
 An other solution would have been to compile PyTorch from source. (HARD)
 
-#### Installing Tensorflow & CUDA
+## Installing Tensorflow & CUDA
 
 Tensorflow est la bibliothèque pemettrant l’utilisation des réseaux de neurones implémentés dans DonkeyCar et CUDA permet d’utiliser le GPU d’un ordinateur et ainsi réduire drastiquement les temps de calcul pour les entraînements (2 à 3 fois moins de temps observé). Il faut pour cela avoir une carte NVIDIA disponible.
 
