@@ -1,21 +1,3 @@
-# ia\_racing\_imt
-## Stop
-
-### Données
-Dataset d'entrainement : `stop/new_dataset/`
-
-Dataset de validation : `stop/validation_dataset/`
-
-Pour chaque dataset, le fichier `labels.json` contient le label pour chaque image du dataset. Le label vaut 1 s'il y a présence de ligne, 0 sinon.
-
-### Architecture et modèle
-Plus d'information dans le PDF `stop/Formalisation.pdf`.
-
-### Intégration de la fonction au modèle
-Explications données dans le `README.md` du dossier `integration_fonction_stop`
-
-
-
 # Lot Stop
 
 ## Principe
@@ -61,6 +43,14 @@ Les données d'entrée sont à renseigner à travers la définition de constante
 En fonction des choix faits, les données de sortie peuvent être :
 - le fichier du modèle
 - les statistiques (de perte en fonction du seuil de confiance)
+
+#### Résultats
+
+Les résultats sont très bons. On peut arriver à des résultats fiables même en fixant un seuil de confiance assez haut. Par conséquent, cela signifie qu'on considère qu'il y a une ligne que si la probabilité qu'il y en ait une soit élevée. On constate qu'en faisant cela, la détection ne présente aucune faux positif (sur les jeux de données fournis) mais rate certaines détections. Ces erreurs vont dans le bon sens car on préfère rater la détection d'une ligne plutôt que de conclure à la présence d'une ligne alors qu'il n'y en avait pas. En effet, on préfère ne pas s'arrêter à la fin et risquer une pénalité plutôt que de s'arrêter en plein milieu de la course.
+
+![](results/Loss-Sigma-crop-14e.png)
+
+> __Warning__ : Erratum, ce n'est pas « Loss » sur l'axe des abscisses mais « Epochs ».
 
 #### Fonctionnement
 
@@ -183,6 +173,11 @@ Les données d'entrée sont à renseigner à travers la définition de constante
 Les données de sortie sont un aperçu des zones détectées comme étant des lignes de stop dans le dossier défini par ```IMWRITE_DIR```. Dans le sous-répertoire *class_0* sont enregistrées les images où une ligne a été détectée alors qu'il n'y en avait pas. Dans le sous-répertoire *class_1/ignore* sont enregistrées les images où aucune ligne n'a été détectée alors qu'il y en avait une. Dans *class_1* se trouve les détections a priori correctes (il reste à vérifier que la zone détectée est bien la bonne). 
 
 Le script retourne aussi le nombre d'images où une potentielle ligne a été détectée sur le nombre d'images testées.
+
+#### Résultats
+Les résultats sont plus mitigés que pour le modèle par classification.
+
+En effet, sur les jeux de données fournis, au mieux on constate une détection d'une ligne sur trois lorsqu'il y a présence de ligne. Avec un réglage exigeant et empirique, on peut arriver à avoir aucun faux positif. Ces résultats mitigés peuvent résulter des conditions de luminosité variante dans les conditions où les images ont été prises (pièce très lumineuse avec beaucoup de fenêtre). Ces conditions ne sont pas celles de la course mais sont les seules dans lesquelles nous ayons pu tester.
 
 #### Fonctionnement
 
