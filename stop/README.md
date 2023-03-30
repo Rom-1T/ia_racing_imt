@@ -15,6 +15,8 @@ En revanche, labelliser les images était plus fastidieux. Pour cette raison, ce
 
 L'ensemble des fichiers pour faciliter la labellisation des images se trouve dans le répertoire ```script_labeling```.
 
+> __Warning__ : pour équilibrer l'apprentissage, il faut que les datasets soient équilibrés, c'est-à-dire qu'il y ait dans chaque dataset autant d'images sans ligne que d'images avec ligne de stop.
+
 ## Stop par Intelligence Artificielle
 
 ### Formalisation
