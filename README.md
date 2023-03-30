@@ -10,23 +10,15 @@ IA RACING - _Code START_
 
 Version 1.1
 
-1.
+1. Fonctionnement général
+   1. Postulat
+   2. Principe
+2. Architecture
+3. cutPicture
+4. getRedRectangle / getGreenRectangle
+5. isSameRectangle
 
-Table des matières
 
-I) FONCTIONNEMENT GÉNÉRAL 3
-
-a) Postulat 3
-
-b) Principe 3
-
-II) Architecture 4
-
-III) cutPicture 4
-
-IV) getRedRectangle / getGreenRectangle 4
-
-V) IsSameRectangle 4
 
 Le projet se décompose en 3 parties principales : le START, le DRIVE et le STOP. Dans ce document, nous allons nous intéresser à la première, qui consiste à démarrer la voiture lorsque le feu rouge, passé au orange, passe finalement au vert. La technique choisie est d’utiliser la bibliothèque opencv pour détecter le feu rouge (ie un rectangle rouge) et repérer lorsqu’il passe au vert. Les seules entrées à lui fournir seront alors les images prises par la caméra et le programme finira par mettre à 1 la valeur d’une variable nommée launch\_car initialement à 0.
 
