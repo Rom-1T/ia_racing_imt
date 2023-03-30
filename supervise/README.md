@@ -89,16 +89,16 @@ Pour finir et lancer l'entraînement, il suffit de taper la ligne suivante.
 Lorsque le modèle est entraîné, il y a 2 modèles créés : un .h5 et un .tflite (à condition que la constante ```CREATE_TF_LITE``` de ```myconfig.py``` ait la valeur Vrai). On conseille d’utiliser le tflite qui est plus léger et annoncé par Google être conçu pour les appareils embarqués. En outre, nous avons rencontré des difficultés à exécuter les .h5 issus des entraînements sur windows, mais pas pour les tflite.
 
 > __Note__ : Si la commande ne génère pas de tflite, il faut s’assurer d’être sur la branche main du repository donkeycar. Pour cela :
-
-    1. ``` $ cd ~/ia_racing/donkeycar/```
-    2. ``` $ ~/ia_racing/donkeycar/$ git branch ```
-
-    S'il y a 2 branches (main et *master) :
-
-    3. ``` $ ~/ia_racing/donkeycar/$ git checkout main ```
-    4. ``` $ ~/ia_racing/donkeycar/$ git pull ```
-
-    En relançant un entraînement, le problème devrait être résolu.
+>
+> 1. ``` $ cd ~/ia_racing/donkeycar/```
+> 2. ``` $ ~/ia_racing/donkeycar/$ git branch ```
+>
+>S'il y a 2 branches (main et *master) :
+>
+> 3. ``` $ ~/ia_racing/donkeycar/$ git checkout main ```
+> 4. ``` $ ~/ia_racing/donkeycar/$ git pull ```
+>
+> En relançant un entraînement, le problème devrait être résolu.
 
 
 ## Envoyer le modèle sur la voiture
