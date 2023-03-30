@@ -22,10 +22,10 @@ def classify(dir, prefix):
             classify(dir + "/" + file.name, file.name)
             shutil.rmtree(dir + "/" + file.name)
         elif file.is_file():
-            # if "jpg" in file.name:
-                # shutil.move(dir + "/" + file.name, TO_CLASSIFY_DIR + "/../" + prefix + "-" + file.name)
-            # elif "record" in file.name or "catalog" in file.name:
-            if "record" in file.name or "catalog" in file.name:
+            if "jpg" in file.name:
+                shutil.move(dir + "/" + file.name, TO_CLASSIFY_DIR + "/../" + prefix + "-" + file.name)
+            elif "record" in file.name or "catalog" in file.name:
+            # if "record" in file.name or "catalog" in file.name:
                 data = open(file.path, "r")
                 contentAll = json.loads(data.read())
                 data.close()
