@@ -20,7 +20,7 @@ Il faut y rajouter un coupe-circuit pour être en conformité avec les règles d
 
 ## Schéma technique
 
-![](./imgs/schema-bloc-voiture-sans-python.png)
+![](../../README_imgs/schema-bloc-voiture-sans-python.png)
 
 ## Montage
 Le montage de la voiture se fait de manière relativement simple. Il y a cependant un certains points d’attention :
@@ -35,7 +35,7 @@ Le coupe-circuit est une demande de Sigma, c’est donc un ajout réglementaire 
 
 <center>
 
-![](./imgs/schema-commutateur.png)
+![](../../README_imgs/schema-commutateur.png)
 
 Schéma d'un commutateur
 
@@ -57,7 +57,7 @@ Schéma d'un commutateur
 
 <center>
 
-![](./imgs/photo-voiture-identification-moteur.jpg)
+![](../../README_imgs/photo-voiture-identification-moteur.jpg)
 
 Identification des fonctions de la voiture
 

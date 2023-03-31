@@ -2,7 +2,7 @@
 
 L'application donkeycar qu'on appelle par abus de langage la voiture est l'ensemble des fichiers et données propres aux exécutions d'une configuration de la voiture. En d'autres termes, le framework est la colonne vertébrale, et les voitures/applications donkeycar font appel au framework pour exécuter les parts. Créer une voiture permet de définir la configuration de l’application et les parts à exécuter. Ainsi, avoir plusieurs voitures peut permettre de tester plusieurs configurations. 
 
-![](../README_imgs/cars-configs.png)
+![](../../README_imgs/cars-configs.png)
 
 > Dans cet exemple, la voiture 1, 2 et 3 peuvent avoir des paramètres différents et appeler des parts différentes.
 
@@ -11,7 +11,7 @@ L'application donkeycar qu'on appelle par abus de langage la voiture est l'ensem
 
 La voiture est structurée en plusieurs répertoires et fichiers.
 
-![](../README_imgs/car-structure.png)
+![](../../README_imgs/car-structure.png)
 
 ### Répertoire ```data```
 
@@ -99,11 +99,11 @@ Une fois que toutes les parts ont été ajoutées, elles sont jouées en boucle 
 V.start(rate_hz=cfg.DRIVE_LOOP_HZ, max_loop_count=cfg.MAX_LOOP)
 ```
 
-![](../README_imgs/parts-exec.png)
+![](../../README_imgs/parts-exec.png)
 
 
 ## Vue d'ensemble de la voiture (software + hardware)
 
 L'image suivante permet d'illustrer les différents composants de la voiture, aussi bien matériels que logiciels. Elle représente les données qui transitent ainsi que les protocoles utilisés pour cela.
 
-![](../README_imgs/donkeycar-full.png)
+![](../../README_imgs/donkeycar-full.png)

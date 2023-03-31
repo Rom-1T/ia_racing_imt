@@ -21,7 +21,7 @@ Il faut juste faire attention à deux ou trois points :
 
 Le framework se structure en fichiers et répertoires dont les plus importants sont ```vehicle.py``` et le répertoire ```parts```.
 
-![](../README_imgs/donkeycar-tree.png)
+![](../../README_imgs/donkeycar-tree.png)
 
 ### Vehicle.py
 
@@ -62,7 +62,7 @@ Ensuite, les parts seront appelées à tour de rôle dans une boucle (définie p
 V.start(rate_hz=cfg.DRIVE_LOOP_HZ, max_loop_count=cfg.MAX_LOOP)
 ```
 
-![](../README_imgs/parts-exec.png)
+![](../../README_imgs/parts-exec.png)
 
 
 #### Structure d'une part
@@ -99,4 +99,4 @@ class PartName:
 
 L'illustration suivante permet de comprendre l'importance du framework et des parts dans le fonctionnement de la voiture. En effet, certaines parts sont utiles pour actionner des éléments physique comme le moteur (ou variateur) et le servomoteur ou pour acquérir des données de l'environnement, par exemple par la caméra.
 
-![](../README_imgs/donkeycar-full.png)
+![](../../README_imgs/donkeycar-full.png)
