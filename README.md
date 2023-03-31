@@ -182,11 +182,11 @@ There are 3 classes defined in the Pytorch Part.
 The CNN Class is an attempt at using RL baseline Zoo's CNN architecture and avoid using autoencoder. However it won't work with the gym environment because it's a continuous environment.
 
 #### MLP 
-The MLP class loads autoencoder and drive models, and combines them by calling the CombinedModel class.
-The objects created with the MLP class have a run function that will be called when driving in auto mode.
-Depending on the config file:
-- enables reconstruction of the image by the autoencoder, so that the input of the drive model can be ploted. If activated, the reconstructed image will be added to the 'outputs'.
-- stores the throttle history directly in the class object, and pass it as argument to the CombinedModel object's forward function.
+The MLP class loads autoencoder and drive models, and combines them by calling the CombinedModel class. 
+The objects created with the MLP class have a run function that will be called when driving in auto mode. 
+Depending on the config file: 
+- enables reconstruction of the image by the autoencoder, so that the input of the drive model can be ploted. If activated, the reconstructed image will be added to the 'outputs'. 
+- stores the throttle history directly in the class object, and pass it as argument to the CombinedModel object's forward function. 
 
 #### CombinedModel
 Creates a model that is a combinaison of an autoencoder and a drive model.
@@ -194,6 +194,6 @@ Depending of input, concatenates the autoencoder output and the throttle history
 
 
 ### Autoencoder (tips)
-The autoencoder project is very simple to use but very difficult to modify without breaking it all.
-We managed to add our own data augmentation by modifying the _make_batch_element function. you can also directly modify the already implemented augmenation function, and call it.
-Make sure that the data fits the expectations of both the autoencoder (3,X,Y so no black and white format) and the restriction imposed by the training script(` assert observation.shape == self.input_dimension, f"{observation.shape} != {self.input_dimension}" `). 
+The autoencoder project is very simple to use but very difficult to modify without breaking it all. 
+We managed to add our own data augmentation by modifying the _make_batch_element function. you can also directly modify the already implemented augmenation function, and call it. 
+Make sure that the data fits the expectations of both the autoencoder (3,X,Y so no black and white format) and the restriction imposed by the training script(` assert observation.shape == self.input_dimension, f"{observation.shape} != {self.input_dimension}" `).  
