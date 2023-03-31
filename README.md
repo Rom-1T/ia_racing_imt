@@ -196,6 +196,6 @@ Depending of input, concatenates the autoencoder output and the throttle history
 ### Autoencoder (tips)
 The autoencoder project is very simple to use but very difficult to modify without breaking it all. 
 
-We managed to add our own data augmentation by modifying the _make_batch_element function. you can also directly modify the already implemented augmenation function, and call it. 
+We managed to add our own data augmentation by modifying the _make_batch_element function. You can also directly modify the already implemented augmenation function, and call it. 
 
 Make sure that the data fits the expectations of both the autoencoder (3,X,Y so no black and white format) and the restriction imposed by the training script(` assert observation.shape == self.input_dimension, f"{observation.shape} != {self.input_dimension}" `).  
