@@ -35,7 +35,7 @@ Par exemple, lors de la prise de l'image ```32_cam_image_array_.jpg``` le 23 mar
 Le fichier ```catalog_X.catalog_manifest``` indique la date de création du catalog X, la longueur de chacune des lignes du catalog X (nombre de caractère + 1 qui correspond retour à la ligne (\n)) ainsi que son chemin et le premier indice de l'image enregistrée pour ce catalog.
 
 ```json
-{"created_at": 1679574289.9697988, "line_lengths": [182, 182, … 185, 185, 185], "path": "catalog_0.catalog_manifest", "start_index": 0}
+{"created_at": 1679574289.9697988, "line_lengths": [182, 182, …, 185, 185, 185], "path": "catalog_0.catalog_manifest", "start_index": 0}
 ```
 
 > __Warning__ : si on veut nettoyer les données pour faire un entraînement en supervisé, il faut s'assurer que les catalogs soient bien cohérents avec les images. Par exemple, si on supprime une image, il faut supprimer les données associées. Si on supprime une ligne du catalog, il faut supprimer la longueur de cette ligne dans le catalog_manifest. Pour cette raison, il vaut mieux avoir des catalogs de plus petite taille (par exemple 50 images) et supprimer les 50 images, le catalog et le catalog_manifest correspondants à celui où il y a eu une erreur de conduite. Dans ce cas, il faudra aussi modifier le manifest global.
@@ -78,7 +78,7 @@ Voici quelques réglages conseillés en amont du projet :
 
 Pour revenir aux réglages de base, il suffit de recommenter la ligne (ajouter un # au début) car les constantes de ```myconfig.py``` viennent écraser celles de ```config.py``` (celles par défaut).
 
-### Le fichier ```manage.py````
+### Le fichier ```manage.py```
 
 Le fichier ```manage.py``` contient la méthode *drive* qui est exécutée lorsqu'on lance la voiture. Elle permet d’ajouter les parts qu’on souhaite utiliser lors de l'exécution de la voiture. La méthode appelle les méthodes *add* et *start* de ```vehicle.py``` du framework donkeycar qui permettent d’ajouter des parts et de les exécuter dans l’ordre d’ajout. Dans la méthode *drive* on définit aussi les données d’entrée et de sortie des parts. Les entrées des unes peuvent être les sorties des autres. 
 
