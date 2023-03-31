@@ -6,7 +6,7 @@ Le fichier ```find_hsv_bounds.py``` permet de trouver les valeurs extrêmes d'un
 
 Son utilisation est simple et intuitive grâce à une interface graphique.
 
-![](../README_imgs/hsv_bounds_ui.png)
+![](../../README_imgs/hsv_bounds_ui.png)
 
 ### Prérequis
 
