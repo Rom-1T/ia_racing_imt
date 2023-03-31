@@ -174,6 +174,7 @@ To use it, here are the steps to follow:
  - Make sure that the pytorch.py, the autoencoder.py and ae_config.py parts are in the donkeycar/parts folder
  - add `--type pytorch`and  `--path [Path to mycar/models]` to `the manage.py drive` command line. 
  - Then by selecting the full auto or auto steering mode in the browser interface, the model should start driving. 
+ - Make sure to update the config file with all arguments that you will find usefull (history, reconstruction...)
  
 ### Pytorch part (description)
 
