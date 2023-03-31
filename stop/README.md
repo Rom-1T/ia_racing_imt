@@ -177,9 +177,11 @@ Les données de sortie sont un aperçu des zones détectées comme étant des li
 Le script retourne aussi le nombre d'images où une potentielle ligne a été détectée sur le nombre d'images testées.
 
 #### Résultats
-Les résultats sont plus mitigés que pour le modèle par classification.
+Les résultats globaux sont plus mitigés que pour le modèle par classification mais très satisfaisant si l'étalonnage est réalisé juste avant la course.
 
-En effet, sur les jeux de données fournis, au mieux on constate une détection d'une ligne sur trois lorsqu'il y a présence de ligne. Avec un réglage exigeant et empirique, on peut arriver à avoir aucun faux positif. Ces résultats mitigés peuvent résulter des conditions de luminosité variante dans les conditions où les images ont été prises (pièce très lumineuse avec beaucoup de fenêtre). Ces conditions ne sont pas celles de la course mais sont les seules dans lesquelles nous ayons pu tester.
+En effet, sur les jeux de données fournis (images prises sur plusieurs journées), au mieux on constate une détection d'une ligne sur trois lorsqu'il y a présence de ligne. Avec un réglage exigeant et empirique, on peut arriver à avoir aucun faux positif. Ces résultats mitigés peuvent résulter des conditions de luminosité variante dans les conditions où les images ont été prises (pièce très lumineuse avec beaucoup de fenêtre). 
+
+Si on réalise un étalonnage avant la course (donc dans les conditions de luminosité correspondant à celle de la course), on peut régler finement la détection de la ligne. Alors, le taux de faux positifs s'avère nul et le taux de détection n'est pas parfait non plus. Toutefois, à l'approche de la ligne (sur 2 à 4 images), la ligne est parfaitement détectée. Par conséquent la détection de la ligne par méthode déterministe est suffisamment satisfaisante pour pouvoir être implémentée sur le véhicule.
 
 #### Fonctionnement
 
