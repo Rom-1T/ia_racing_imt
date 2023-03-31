@@ -94,3 +94,9 @@ class PartName:
 	def update(self):
 		pass
 ```
+
+## Place du framework vis-à-vis du matériel
+
+L'illustration suivante permet de comprendre l'importance du framework et des parts dans le fonctionnement de la voiture. En effet, certaines parts sont utiles pour actionner des éléments physique comme le moteur (ou variateur) et le servomoteur ou pour acquérir des données de l'environnement, par exemple par la caméra.
+
+![](../README_imgs/donkeycar-full.png)
