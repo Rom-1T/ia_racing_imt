@@ -101,7 +101,7 @@ Je vous conseille de ne jamais modifier cette scène mais de la copier comme je 
 
 Pour ajouter une scène, il suffit de faire clic droit dans le dossier scène puis faire create>scene et de donner un nom à cette dernière. Après l’avoir ouverte en double cliquant dessus, vous devriez avoir ces éléments dans l’arborescence de votre scène&#x20;
 
-<figure><img src=".gitbook/assets/Image1 (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/Image1.png" alt=""><figcaption></figcaption></figure>
 
 Sélectionnez les deux éléments et supprimez-les, votre scène est alors vide. Je vous conseille de copier une scène déjà existante puis de modifier son contenu plutôt que de remettre un à un chaque élément au risque de se tromper ou d’en oublier. Malheureusement, il n’est pas possible de dupliquer une scène, d’où l’utilité de créer une nouvelle scène, de la vider et de copier le contenu d’une autre déjà existante. Pour faire cette dernière étape, vous allez devoir ouvrir deux scènes en même temps : gardez ouverte la nouvelle scène puis faites un glisser-déposer de la scène à copier depuis la zone 4 à la zone 1 (cf première image) , vous vous retrouvez alors dans cette situation :
 
@@ -133,27 +133,21 @@ Les points rouges représentent les sommets et les points bleus les angles. Pour
 
 NB : Je vous conseille de rester dans le point de vue dans lequel je suis, il vous permettra notamment de modifier les points dans le plan (x,z) et de ne pas modifier la position en y qui doit rester à 0 (ie, au niveau du sol). Lorsque vous cliquerez sur un point, vous verrez ce rectangle vert qui permet de ne le déplacer que sur le plan (x,z) :
 
-![Une image contenant graphique
-
-Description générée automatiquement](broken-reference)
+<figure><img src=".gitbook/assets/Image3.png" alt=""><figcaption></figcaption></figure>
 
 Dans cette configuration, l’algorithme va générer la route en suivant le chemin créé. Pour voir s’il se génère comme il le faut, il suffit de Play en appuyant sur le bouton ![](broken-reference) en haut de l’écran, puis en allant de nouveau dans l’onglet Scene afin de pouvoir se déplacer (car Unity affichera automatiquement la fenêtre Game dans laquelle vous ne pourrez pas vous déplacer).
 
 NB : Verifiez dans l’Inspector de ScenePrefab>\_controllers>PathManager que dans le script PathManager, Do Load Game Object Path soit coché et que pathelem soit présent dans la variable Pathelem (sinon rajouté le en le glissant déposant dans la case) :
 
-![Une image contenant texte
+<figure><img src=".gitbook/assets/Image4.png" alt=""><figcaption></figcaption></figure>
 
-Description générée automatiquement](broken-reference)
+<figure><img src=".gitbook/assets/Image5.png" alt=""><figcaption></figcaption></figure>
 
-![Une image contenant texte
-
-Description générée automatiquement](broken-reference)
-
-### Modifier la texture <a href="#_toc130232450" id="_toc130232450"></a>
+Modifier la texture
 
 Pour modifier la texture du circuit, il suffit d’aller dans ScenePrefab>\_controllers>WorldBuilder puis de mettre la texture de route désirée au niveau de l’élément 0 de Road Materials comme sur l’image ci-dessous (attention il faut mettre le Material et pas l’image png):
 
-![](broken-reference)
+<figure><img src=".gitbook/assets/Image6.png" alt=""><figcaption></figcaption></figure>
 
 NB 1 : Vérifiez bien que RoadPrefab est présent dans Road Prefab Mesh.
 
@@ -167,19 +161,15 @@ Il suffit de modifier son Material « EndLine » comme on modifie le sol.
 
 Pour ajouter la nouvelle piste au simulateur, il faut d’abord dire à Unity que cette nouvelle scène doit être chargée lorsqu’on demandera de Build le projet pour créer l’exécutable. Avec cette nouvelle scène ouverte, cliquez sur File>Build Settings, une fenêtre s’ouvrira, cliquez alors sur Add Open Scenes (la nouvelle scène apparaîtra alors dans la liste):
 
-![](broken-reference)
+<figure><img src=".gitbook/assets/Image7.png" alt=""><figcaption></figcaption></figure>
 
 Désormais, il faut rajouter le circuit dans le menu pour pouvoir le sélectionner. Pour ça, ouvrez la scène menu en double-cliquant dessus. Cliquez sur \_TcpMenuController dans l’arborescence puis dans l’Inspector, cliquez sur le petit bouton « + » au bas de la liste Scene\_names dans le script Tcp Menu Handler pour rajouter un nouvel élément :
 
-![Une image contenant table
-
-Description générée automatiquement](broken-reference)
+<figure><img src=".gitbook/assets/Image9.png" alt=""><figcaption></figcaption></figure>
 
 Rajoutez alors le nom de votre nouvelle scène dans le nouvel élément rajouté :
 
-![Une image contenant texte
-
-Description générée automatiquement](broken-reference)
+<figure><img src=".gitbook/assets/Image10.png" alt=""><figcaption></figcaption></figure>
 
 Il ne nous reste plus qu’à rajouter une image de notre scène dans le dossier Assets>Prefabs>Road\&Paths>RoadImages comme dit dans la partie 2.
 
