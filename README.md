@@ -182,20 +182,121 @@ There are 3 classes defined in the Pytorch Part.
 The CNN Class is an attempt at using RL baseline Zoo's CNN architecture and avoid using autoencoder. However it won't work with the gym environment because it's a continuous environment.
 
 #### MLP 
-The MLP class loads autoencoder and drive models, and combines them by calling the CombinedModel class. 
-The objects created with the MLP class have a run function that will be called when driving in auto mode. 
-Depending on the config file: 
-- enables reconstruction of the image by the autoencoder, so that the input of the drive model can be ploted. If activated, the reconstructed image will be added to the 'outputs'. 
-- stores the throttle history directly in the class object, and pass it as argument to the CombinedModel object's forward function. 
+The MLP class loads autoencoder and drive models, and combines them by calling the CombinedModel class.
+The objects created with the MLP class have a run function that will be called when driving in auto mode.
+```
+def run(self, img_arr: np.ndarray) \  
+        -> Tuple[Union[float, np.ndarray], ...]:  
+
+```
+If this condition is true, reconstructs the image with the autoencoder, so that the input of the drive model can be ploted. If true, the reconstructed image will be added to the 'outputs'.
+```
+ if self.reconstruct :  
+        order_lst, reconstructed_image = self.model.forward(img_arr, self.throttle_history_val, reconstruct=True)  
+    else :  
+        order_lst = self.model.forward(img_arr, self.throttle_history_val) 
+```
+This is a postprocessing of the throttle.
+```
+order = order_lst[0]  
+    if order[1] > 0.22 :  
+        order[1] = 0.22  
+  if order[1] < 0.17 :  
+        order[1] += 0.05  
+```
+If this condition is true, stores the throttle history directly in the class object, and pass it as argument to the CombinedModel object's forward function.
+``` 
+    
+  if self.throttle_history :  
+        self.throttle_history_val = np.insert(self.throttle_history_val,0,order[1])[:-1]  
+        print("THROTTLE HISTORY : ", self.throttle_history_val)  
+    logger.info('model order', str(order[0]),str(order[1]))  
+    if self.reconstruct :  
+        return order[0],order[1],reconstructed_image  
+    else :  
+        return order[0], order[1]
+```
 
 #### CombinedModel
 Creates a model that is a combinaison of an autoencoder and a drive model.
-Depending of input, concatenates the autoencoder output and the throttle history, before passing it as input to the drive model.
+```
+def __init__(self, model1, model2):  
+        self.model1 = model1  
+        self.model2 = model2  
+```
 
+Depending on throttle history input, concatenates the autoencoder output and the throttle history, before passing it as input to the drive model.
+```
+def forward(self, x, throttle_history=None, reconstruct=False):  
+        encoded_img = self.model1.encode_from_raw_image(x)  
+        if throttle_history is not None :  
+            x1 = np.concatenate((encoded_img.flatten(),throttle_history))  
+        else :  
+            x1 = encoded_img.flatten()  
+```
 
+Depending on the reconstruct input, uses the decoder and returns the decoded image as output.
+
+```
+x2 = self.model2.predict(x1, deterministic=True)  
+        if reconstruct :  
+            reconstructed_image = self.model1.decode(encoded_img)[0]  
+            return x2, reconstructed_image  
+        else :  
+            return x2
+```
 ### Autoencoder (tips)
-The autoencoder project is very simple to use but very difficult to modify without breaking it all. 
+The autoencoder project is very simple to use but very difficult to modify without breaking it all.
+We managed to add our own data augmentation by adding a noiser in the `_make_batch_element function` : 
 
-We managed to add our own data augmentation by modifying the _make_batch_element function. You can also directly modify the already implemented augmenation function, and call it. 
+```
+def _make_batch_element(cls, image_path, augmenter=None, image_directory=None, noiser=None):  
+    """  
 
-Make sure that the data fits the expectations of both the autoencoder (3,X,Y so no black and white format) and the restriction imposed by the `autoencoder.py` script(` assert observation.shape == self.input_dimension, f"{observation.shape} != {self.input_dimension}" `).  
+									[...]
+  
+    if augmenter is not None:  
+        input_img = augmenter.augment_image(  
+            preprocess_image(im.copy(), normalize=False), hooks=imgaug.HooksImages(postprocessor=postprocessor)  
+        )  
+        # Normalize  
+  input_img = augmenter(image=input_img)['image']  
+        input_img = preprocess_input(input_img.astype(np.float32), mode="rl")  
+        input_img = input_img.reshape((1,) + input_img.shape)  
+    if image_directory is not None:  
+        im = cv2.imread(image_path2)  
+  
+    if noiser is not None:  
+        input_img = noiser(  
+            preprocess_image(im.copy(), normalize=False))  
+        # Normalize  
+  input_img = cv2.cvtColor(input_img, cv2.COLOR_GRAY2BGR)  
+        input_img = preprocess_input(input_img.astype(np.float32), mode="rl")  
+        input_img = input_img.reshape((1,) + input_img.shape)
+
+```
+
+You can also directly modify the already implemented `get_image_augmenter ` function:
+
+```
+def get_image_augmenter() -> iaa.Sequential:  
+    """  
+ :return: Image Augmenter """  return iaa.Sequential(  
+        [  
+            Sometimes(0.5, iaa.Fliplr(1)),  
+  # Add shadows (from https://github.com/OsamaMazhar/Random-Shadows-Highlights)  
+  Sometimes(0.3, RandomShadows(1.0)),  
+  # Sometimes(0.3, iaa.MultiplyBrightness((0.8, 1.2))),  
+  Sometimes(0.5, iaa.GaussianBlur(sigma=(0, 2.0))),  
+  Sometimes(0.5, iaa.MotionBlur(k=(3, 11), angle=(0, 360))),  
+  # Sometimes(0.5, iaa.Sharpen(alpha=(0.0, 1.0), lightness=(0.75, 2.0))),  
+  Sometimes(0.4, iaa.Add((-25, 25), per_channel=0.5)),  
+  # Sometimes(0.5, iaa.Multiply((0.6, 1.4), per_channel=0.5)),  
+ # Sometimes(0.2, iaa.CoarseDropout((0.0, 0.05), size_percent=(0.02, 0.10), per_channel=0.5)), # 20% of the corresponding size of the height and width  Sometimes(0.3, iaa.Cutout(nb_iterations=(1, 5), size=0.2, squared=False)),  
+  # Sometimes(0.5, iaa.contrast.LinearContrast((0.5, 1.8), per_channel=0.5)),  
+ # Sometimes(0.1, iaa.AdditiveGaussianNoise(scale=10, per_channel=True))  ],  
+  random_order=True,  
+  )
+```
+In both cases, make sure that the data fits the expectations of both the autoencoder (RGB format) and the restriction imposed by the autoencoder.py script:
+` assert observation.shape == self.input_dimension, f"{observation.shape} != {self.input_dimension}" `). 
