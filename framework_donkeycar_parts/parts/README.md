@@ -466,7 +466,7 @@ Elle retourne :
 - L'image brute avec le haut rogné (utile pour isoler le bas d'image à la détection de ligne de stop)
 - L'image préprocessée (utile pour le pilote autonome)
 
-![](../README_imgs/inputs-outpust-manage_py.png)
+![](../../README_imgs/inputs-outpust-manage_py.png)
 
 Pour intégrer le préprocessing, il y a plusieurs fichiers à modifier.
 
@@ -856,7 +856,7 @@ Le Javascript est aussi une ressource statique et il est intéressant de modifie
 #### 6.2.1. Ajouter une donnée sortante
 Pour l’ajout d’une donnée sortante sur l’interface, cette section se propose d’introduire les modifications à réaliser en commençant par les données générées par le serveur jusqu’à l’implémentation dans l’interface. L’image suivante illustre l’appel des fichiers :
 
-![](../README_imgs/websocket-to-client.png)
+![](../../README_imgs/websocket-to-client.png)
 
 Pour ajouter l’affichage d’un donnée entrante, il y a 4 grandes étapes :
 
@@ -881,7 +881,7 @@ Il faut ensuite mettre à jour la variable changes de *run\_threaded* de *LocalW
 Pour ajouter une donnée entrante, on doit écouter un événement qui générera la donnée (clic sur un bouton, appui sur une touche…).
 À l’inverse de la précédente, cette partie se propose d’introduire les modifications à réaliser de l’interface vers le serveur car la donnée part de l’interface.
 
-![](../README_imgs/websocket-from-client.png)
+![](../../README_imgs/websocket-from-client.png)
 
 1. **Il faut modifier ```vehicle.html```**
 
