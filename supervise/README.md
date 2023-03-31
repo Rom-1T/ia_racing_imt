@@ -153,6 +153,26 @@ Sur l’ordinateur :
 3. ``` ~/ia_racing/repo-mycar/$ git push ```
 
 
+### Lancer un modèle
+
+Pour lancer un model, il suffit de se connecter en ssh à la Raspberry ```ssh pi@imtaracing.local```.
+
+Ensuite, de se rendre dans le répertoire du fichier ```manage.py```.
+
+```
+$ cd projects/mycar
+```
+
+Puis de s'assurer que le paramétrage est correct dans ```myconfig.py``` (preprocessing…) avant de lancer le modèle avec la commande suivante.
+
+```
+~/projects/mycar/$ python manage.py drive --model ./models/XXXXXXX.tflite --type tflite_linear
+```
+
+> __Note__ : avec cette commande nous exécutons le modèle Linear, mais il en existe d'autres. La liste est détaillée sur la [documentation de la part Keras](https://docs.donkeycar.com/parts/keras/). Il suffit de préfixer le type par "tflite_" lorsqu'on utilise des tflite.
+
+Ensuite, avec le navigateur de son ordinateur, il faut se rendre à l'adresse *[http://imtaracing.local:8887/drive](http://imtaracing.local:8887/drive)* (en changeant le nom d'hôte si ce n'est pas imtaracing) et passer le menu déroulant du Mode de conduite de "User" à "Full Auto".
+
 ## Créer sa part et son modèle
 
 Nous avons essayé de créer notre propre modèle et notre propre part avant d'utiliser l'intégration des modèles au framework. Même si cela s'est conclu par un échec (modèle peu concluant au niveau de la direction), cela est un bon exercice pour prendre en main les problèmes d'apprentissage.
