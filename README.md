@@ -35,7 +35,7 @@ Dans ce document seront détaillées les étapes principales pour pouvoir modifi
 
 Si vous avez déjà utilisé Unity, vous pouvez sauter cette partie, elle ne fait que préciser certaines bases du logiciel pour ceux qui le découvrent mais je conseille de tout de même regarder un tuto YouTube pour bien connaître comment il s’organise.
 
-![](broken-reference)
+<figure><img src=".gitbook/assets/Capture.PNG" alt=""><figcaption></figcaption></figure>
 
 1. Arborescence de la scène : c’est ici que vous retrouverez tous les éléments présents dans la scène dont le nom est marqué en haut, ici c’est **menu**.
 2. Rendu visuel de la scène : fenêtre principale où l’on peut voir les différents éléments de la scène
@@ -99,15 +99,13 @@ Je vous conseille de ne jamais modifier cette scène mais de la copier comme je 
 
 ### AJOUTER/DUPLIQUER UNE SCÈNE <a href="#_toc130232447" id="_toc130232447"></a>
 
-Pour ajouter une scène, il suffit de faire clic droit dans le dossier scène puis faire create>scene et de donner un nom à cette dernière. Après l’avoir ouverte en double cliquant dessus, vous devriez avoir ces éléments dans l’arborescence de votre scène :
+Pour ajouter une scène, il suffit de faire clic droit dans le dossier scène puis faire create>scene et de donner un nom à cette dernière. Après l’avoir ouverte en double cliquant dessus, vous devriez avoir ces éléments dans l’arborescence de votre scène&#x20;
 
-![](broken-reference)
+<figure><img src=".gitbook/assets/Image1 (1).png" alt=""><figcaption></figcaption></figure>
 
 Sélectionnez les deux éléments et supprimez-les, votre scène est alors vide. Je vous conseille de copier une scène déjà existante puis de modifier son contenu plutôt que de remettre un à un chaque élément au risque de se tromper ou d’en oublier. Malheureusement, il n’est pas possible de dupliquer une scène, d’où l’utilité de créer une nouvelle scène, de la vider et de copier le contenu d’une autre déjà existante. Pour faire cette dernière étape, vous allez devoir ouvrir deux scènes en même temps : gardez ouverte la nouvelle scène puis faites un glisser-déposer de la scène à copier depuis la zone 4 à la zone 1 (cf première image) , vous vous retrouvez alors dans cette situation :
 
-![Une image contenant texte, intérieur, ordinateur, ordinateur portable
-
-Description générée automatiquement](broken-reference)
+<figure><img src=".gitbook/assets/Image2.png" alt=""><figcaption></figcaption></figure>
 
 Sélectionnez alors tous les éléments de la scène à copier (ici Sigma\_course) et collez les dans la nouvelle (ici New Scene). Fermez ensuite la scène à copier en faisant clic droit dessus puis Remove Scene, vous avez alors votre nouvelle scène.
 
@@ -127,13 +125,7 @@ Pour modifier la piste, plusieurs étapes sont à suivre :
 
 Pour modifier la forme de la piste, cliquez sur Path dans ScenePrefab>world>environnement comme sur l’image ci-dessous :
 
-![Une image contenant texte, capture d’écran, ordinateur
-
-Description générée automatiquement](broken-reference)
-
-**1**
-
-**2**
+<figure><img src=".gitbook/assets/Capture2.PNG" alt=""><figcaption></figcaption></figure>
 
 NB : pour vous mettre dans le même point de vue que celui montré, appuyé sur l’axe y au niveau de 1 puis sur Top au niveau de 2.
 
