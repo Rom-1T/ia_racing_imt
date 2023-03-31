@@ -17,6 +17,42 @@ La voiture est structurée en plusieurs répertoires et fichiers.
 
 Le répertoire ```data``` stocke les images récupérées lors de la conduite. Il stocke également les fichiers contenant les valeurs d'angle et de vitesse de la voiture pour chaque image. Les données sont stockées dans des tubs. Pour entraîner le modèle en conduite supervisée, il faudra récupérer les données enregistrées dans les tubs.
 
+Dans le répertoire ```data``` de ce repository, nous avons laissé un tub (certes inintéressant au niveau des images) pour en comprendre la structure.
+
+#### Les images
+Les images du tubs sont stockées dans le répertoire images. Elles sont numérotées et suffixées par *"_cam_image_array_"*.
+
+#### Les catalogs
+Les données angulaires et de vitesse sont enregistrées dans des catalogs (par défaut de 1000 entrées) nommés ```catalog_X.catalog```.
+Chaque ligne d'un catalog est un dictionnaire convertit en json qui enregistre les données liées à l'enregistrement d'une image.
+
+Par exemple, lors de la prise de l'image ```32_cam_image_array_.jpg``` le 23 mars 2023, on peut voir que l'angle était à 0 mais la vitesse était à -0.5571428571428572 (les vitesses comme les angles sont normés entre -1 et 1) en conduite manuelle. Cela signifie que la voiture était en train de reculer.
+
+```json
+{"_index": 32, "_session_id": "23-03-23_0", "_timestamp_ms": 1679574357691, "cam/image_array": "32_cam_image_array_.jpg", "user/angle": 0.0, "user/mode": "user", "user/throttle": -0.5571428571428572}
+```
+
+Le fichier ```catalog_X.catalog_manifest``` indique la date de création du catalog X, la longueur de chacune des lignes du catalog X (nombre de caractère + 1 qui correspond retour à la ligne (\n)) ainsi que son chemin et le premier indice de l'image enregistrée pour ce catalog.
+
+```json
+{"created_at": 1679574289.9697988, "line_lengths": [182, 182, … 185, 185, 185], "path": "catalog_0.catalog_manifest", "start_index": 0}
+```
+
+> __Warning__ : si on veut nettoyer les données pour faire un entraînement en supervisé, il faut s'assurer que les catalogs soient bien cohérents avec les images. Par exemple, si on supprime une image, il faut supprimer les données associées. Si on supprime une ligne du catalog, il faut supprimer la longueur de cette ligne dans le catalog_manifest. Pour cette raison, il vaut mieux avoir des catalogs de plus petite taille (par exemple 50 images) et supprimer les 50 images, le catalog et le catalog_manifest correspondants à celui où il y a eu une erreur de conduite. Dans ce cas, il faudra aussi modifier le manifest global.
+
+#### Le manifest
+
+Le manifest global contient plusieurs informations. Il indique les clefs des dictionnaires de chaque ligne des catalogs ainsi que les formats de données associés. Ensuite il indique la date de la course. Enfin il fait la liste de tous les catalogs associés à l'enregistrement du tub et indique le nombre maximum de lignes qu'ils ont ainsi que l'indice de la dernière ligne de données.
+
+```json
+["cam/image_array", "user/angle", "user/throttle", "user/mode"]
+["image_array", "float", "float", "str"]
+{}
+{"created_at": 1679574289.967773, "sessions": {"all_full_ids": ["23-03-23_0"], "last_id": 0, "last_full_id": "23-03-23_0"}}
+{"paths": ["catalog_0.catalog", "catalog_1.catalog"], "current_index": 79, "max_len": 50, "deleted_indexes": []}
+```
+
+> __Note__ : pour changer le nombre d'entrée par catalog, il suffit de rajouter le paramètre *max_catalog_len* lors de l'initialisation de *TubWriter* dans ```manage.py```. Une constante à rajouter dans ```myconfig.py``` peut être un choix judicieux pour changer facilement cette valeur.
 
 ### Répertoire ```models```
 
