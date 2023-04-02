@@ -70,7 +70,7 @@ Identification des fonctions de la voiture
 
 ## Ajout d'un controlleur - manette
 
-Il est possible de connecter plusieurs types de manette de jeu à la voiture. Une [section de la documentation](https://docs.donkeycar.com/parts/controllers/) est dédiée à ce sujet. Lors de ce projet, nous  avons connecté une manette de PS4 à la voiture. Pour utiliser la manette, il faudra rajouter l'argument ```--js``` à la commande pour lancer la voiture ([voir exécution de la voiture](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration)).
+Il est possible de connecter plusieurs types de manette de jeu à la voiture. Une [section de la documentation](https://docs.donkeycar.com/parts/controllers/) est dédiée à ce sujet. Lors de ce projet, nous  avons connecté une manette de PS4 à la voiture. Pour utiliser la manette, il faudra rajouter l'argument ```--js``` à la commande pour lancer la voiture ([voir exécution de la voiture](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration/mycar)).
 
 ##### Avantages à connecter sa propre manette :
 - Meilleur contrôle sur les joysticks (notamment pour la vitesse)
