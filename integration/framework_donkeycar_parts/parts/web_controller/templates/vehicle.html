@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+{% block content %}
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<div class="container-fluid" style="background: #000; color: #EEE;">
+  <h1 style="display: none; position: fixed; top: calc(50vh - 60px); left: 0; right: 0; color: red; text-align: center; z-index: 9999;" id="end">Bravo ! La Donkeycar est arrivée ! ! !<span id="end-confetti"></span></h1>
+  <h1 style="position: fixed; top: calc(50vh - 60px); left: 50vw; color: red; text-align: center; z-index: 9999;" id="end-confetti"></h1>
+  <div class="row">
+
+    <div class="col-md-6">
+      <!-- pilot mode/recording -->
+      <!-- video -->
+      <div class="thumbnail" style="width: 100%; background: #000; color: #EEE; border: solid 2px red; border-radius: 5px;">
+        <img id='mpeg-image' style="width: 49.5%; display: inline-block; background: #000;" class='img-responsive' src="/video"/> </img>
+        <img id='mpeg-image2' style="width: 49.5%; display: inline-block; background: #000;" class='img-responsive' src="/video_prepro"/> </img>
+      </div>
+
+      <!-- steering/throttle meters -->
+      <div id="control-bars">
+        <div>
+          <span class="glyphicon glyphicon-resize-horizontal pull-left"></span>
+          <div class="progress negative">
+            <div id="angle-bar-backward" class="progress-bar progress-bar-warning pull-right" role="progressbar" style="width: 0%;">
+            </div>
+          </div>
+
+          <div class="progress positive">
+            <div id="angle-bar-forward" class="progress-bar progress-bar-info" role="progressbar" style="width: 0%;">
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <span class="glyphicon glyphicon-resize-vertical pull-left"></span>
+          <div class="progress negative">
+            <div id="throttle-bar-backward" class="progress-bar progress-bar-danger pull-right" role="progressbar" style="width: 0%;">
+            </div>
+          </div>
+
+          <div class="progress positive">
+            <div id="throttle-bar-forward" class="progress-bar progress-bar-success" role="progressbar" style="width: 0%;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> <!-- end video column -->
+
+    <div  class="col-md-6">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-inline">
+            <div>
+              <div class="btn-group" data-toggle="buttons">
+                <label class="btn btn-dark" id="joystick-toggle" style="border-color: red;">
+                  <input type="radio" name="controlMode" id="joystick" autocomplete="off" value="joystick"> Joystick
+                </label>
+                <label class="btn btn-dark" id="gamepad-toggle" style="border-color: red;">
+                  <input type="radio" name="controlMode" id="gamepad" autocomplete="off" value="gamepad"> Gamepad
+                </label>
+                <label class="btn btn-dark" id="tilt-toggle" style="border-color: red;">
+                  <input type="radio" name="controlMode" id="tilt" autocomplete="off" value="tilt">Device Tilt
+                </label>
+              </div>
+              <label class="group-label" style="display: inline">
+                <a data-toggle="modal" class="btn btn-primary btn-xs" data-target="#aboutControlModes">
+                  <span class="glyphicon glyphicon-info-sign"></span>
+                </a>
+              </label>
+            </div>
+
+          </div>
+          <div class="col" id="joystick-column">
+            <div style="text-align:center;color:rgb(255, 27, 65);display:inline-block">Note: physical game controller overrides web control.</div>
+            <!-- virtual joystick -->
+            <div id="joystick_outer" class="thumbnail"  style="background: #333;">
+              <div id="joystick_container"  style="background: #333;">
+                <p>Click/touch to use joystick.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <br><br><br>
+          <form>
+              <label>(M)ode</label>
+              <select id="mode_select" class="form-control"  style="display: inline">
+                <option value="user">(U)ser</option>
+                <option value="local">Full (A)uto</option>
+                <option value="local_angle">Auto (S)teer</option>
+              </select>
+              <button type="button" id="record_button" class="btn btn-warning" >
+                Start (R)ecording
+              </button>
+          </form>
+          
+          <!-- programmable buttons -->
+          <form id="button_bar" class="btn-group" style="color: #EEE; background: #000;">
+            <button type="button" id="w1" class="btn btn-dark" style="background: #000; border: solid 1px red;">1</button>
+            <button type="button" id="w2" class="btn btn-dark" style="background: #000; border: solid 1px red;">2</button>
+            <button type="button" id="w3" class="btn btn-dark" style="background: #000; border: solid 1px red;">3</button>
+            <button type="button" id="w4" class="btn btn-dark" style="background: #000; border: solid 1px red;">4</button>
+            <button type="button" id="w5" class="btn btn-dark" style="background: #000; border: solid 1px red;">5</button>
+          </form>
+          
+          <br><br>
+
+          <div>
+            <label class="group-label" style="display: inline">Throttle:</label>
+            <select id="throttle_mode_select" class="form-control" style="display: inline">
+              <option value="user" selected>Maximum</option>
+              <option value="constant">Constant</option>
+            </select>
+            <select id="max_throttle_select" class="form-control" style="display: inline">
+              {% for t in [100, 95, 90, 85, 80, 75, 70, 60, 50, 40, 30, 20, 10] %}
+                <option value="{{ t / 100.0 }}">{{ t }}%</option>
+              {% end %}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top: 30px;">
+        <div class="col">
+          <h3 class="text-center">Informations additionnelles</h3>
+          <br>
+          <div class="row">
+            <div class="col-md-4 text-center" style="color: yellow">
+              <div class="row" style="font-size: 24px;">
+                <div class="col">
+                  Vitesse
+                </div>
+              </div>
+              <div class="row" style="font-size: 64px;">
+                <div class="col">
+                  <p>
+                    <span id="v-throttle-value">0</span>
+                  </p>
+                </div>
+              </div>
+              <div class="row" style="font-size: 64px;">
+                <div class="col">
+                  <form id="forcedStart_form" class="btn-group" style="color: #EEE; background: #000;">
+                    <button type="button" id="forcedStart_btn" class="btn btn-dark" style="background: #000; border: solid 1px red;">Forcer le démarrage</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 text-center" style="color: orange">
+              <div class="row" style="font-size: 24px;">
+                <div class="col">
+                  Angle
+                </div>
+              </div>
+              <div class="row" style="font-size: 64px;">
+                <div class="col">
+                  <p>
+                    <span id="v-angle-value">0</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 text-center" style="color: greenyellow">
+              <div class="row" style="font-size: 24px;">
+                <div class="col">
+                  Nombre de tours
+                </div>
+              </div>
+              <div class="row" style="font-size: 64px;">
+                <div class="col">
+                  <p>
+                    <span id="lap-counter">0</span>
+                  </p>
+                </div>
+              </div>
+              <div class="row" style="font-size: 64px;">
+                <div class="col">
+                  <form id="stop-count_form" class="btn-group" style="color: #EEE; background: #000;">
+                    <button type="button" id="stop-count" class="btn btn-dark" style="background: #000; border: solid 1px red;">Arrêter le compte</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> <!-- end joystick-column -->
+    <div id="joystick-padding"></div>
+  </div> <!-- END row -->
+</div> <!-- END page Container -->
+
+<footer class="footer" id="vehicle_footer" style="background: #333">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <button type="button" id="brake_button" class="btn btn-lg btn-danger btn-block">Start Vehicle (space)</button>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Modal -->
+<div class="modal fade" id="aboutControlModes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">About Control Modes</h4>
+      </div>
+      <div class="modal-body">
+        <p>
+          <strong>Joystick</strong> control is provided via the blue touch/click area on screen. Click or touch and drag to control throttle and steering. In joystick mode, you can also use the following keyboard keys:
+          <ul>
+            <li>Forward: <code>I</code></li>
+            <li>Reverse: <code>K</code></li>
+            <li>Left: <code>J</code> </li>
+            <li>Right: <code>L</code></li>
+          </ul>
+        </p>
+        <p>
+          <strong>Gamepad</strong> control is enabled by the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API">HTML5 gamepad API</a>, currently supported by Chrome and Firefox. Playstation 3 controllers have been confirmed to work.
+        </p>
+        <p>
+          <strong>Device tilt</strong> control is enabled for devices with <a href="https://developer.mozilla.org/en-US/docs/Web/API/Detecting_device_orientation">device orientation sensors</a>, and should work with most modern smartphones. Hold your device in landscape mode, tilt  forward/backward for throttle and left/right for steering.
+        </p>
+        <p>
+          <strong>Pilot Mode</strong> can be toggled or chosen using the keyboard.
+          <ul>
+            <li>Toggle Pilot <b>M</b>ode: <code>M</code></li> 
+            <li><b>U</b>ser Mode: <code>U</code></li> 
+            <li>Auto <b>S</b>teering  Mode: <code>S</code></li> 
+            <li>Full <b>A</b>uto Mode: <code>A</code></li> 
+          </ul>
+        </p>
+        <p>
+          <strong>Recording</strong> can be toggled using the keyboard.
+          <ul><li>Toggle <b>R</b>ecording: <code>R</code></li></ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+$( document ).ready(function() {
+  console.log( "document ready!" );
+  driveHandler.load()
+});
+</script>
+
+{% end %}
