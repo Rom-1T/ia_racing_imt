@@ -40,7 +40,7 @@ Encore une fois à l’aide de la fonction IsSameRectangle, on compare ce rectan
 
 ### Architecture <a href="#_toc130314533" id="_toc130314533"></a>
 
-<figure><img src=".gitbook/assets/Image1.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../README_imgs/Image1.png" alt=""><figcaption></figcaption></figure>
 
 ![](broken-reference)
 

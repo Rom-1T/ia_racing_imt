@@ -103,7 +103,7 @@ En addition, nous avons inclus 2 répertoires supplémentaires :
     - DRIVE par renforcement
         - [Ajuster le simulateur](https://github.com/Rom-1T/ia_racing_imt/tree/main/simulateur) et [ajouter un circuit](https://github.com/Rom-1T/ia_racing_imt/tree/main/drive_renforcement)
         - [Intégrer et utiliser le framework RL-Baseline3-Zoo framework](https://github.com/Rom-1T/ia_racing_imt/tree/main/drive_renforcement)
-        - [Installer Pytorch](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration)
+        - [Installer Pytorch sur la voiture](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration)
 - Intégration
     - [Monter la voiture + coupe-circuit](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration/montage_voiture)
     - [Installer l'OS](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration)

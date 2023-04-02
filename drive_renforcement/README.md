@@ -4,6 +4,8 @@
 
 Detailed documentation: [https://github.com/tawnkramer/gym-donkeycar](https://github.com/tawnkramer/gym-donkeycar)
 
+To understand how the simulator works and create new circuit, please check [our README about the simulator](https://github.com/Rom-1T/ia_racing_imt/tree/main/simulateur).
+
 #### Add a new circuit
 
 When you have created a new circuit "TestCircuit" you need to create a new Gym Env. There are 3 steps to do so
@@ -157,11 +159,11 @@ Here are a few reasons why we use an AE :&#x20;
 
 ### Integration in the raspberry pi
 
-<figure><img src=".gitbook/assets/pi_process.jpg" alt=""><figcaption><p>Process of the raspberry pi simplfied</p></figcaption></figure>
+<figure><img src="../README_imgs/pi_process.jpg" alt=""><figcaption><p>Process of the raspberry pi simplfied</p></figcaption></figure>
 
 
 ### Pytorch part (integration)
-The pytorch part makes it possible to use pytorch models in donleycar. However it is not very flexible and the only models accepted are autoencoder(described in a previous chapter) + drive (loaded as TQC with the RL-Baseline Zoo library).
+The pytorch part makes it possible to use pytorch models in donkeycar. However it is not very flexible and the only models accepted are autoencoder(described in a previous chapter) + drive (loaded as TQC with the RL-Baseline Zoo library).
 To use it, here are the steps to follow:
 
  - Put the models as drive.zip and ae.pkl in mycar/models.
@@ -169,7 +171,11 @@ To use it, here are the steps to follow:
  - add `--type pytorch`and  `--path [Path to mycar/models]` to `the manage.py drive` command line. 
  - Then by selecting the full auto or auto steering mode in the browser interface, the model should start driving. 
  - Make sure to update the config file with all arguments that you will find usefull (history, reconstruction...)
- 
+
+To use it on the car, you will need to have Pytorch install. It is a tricky install, please check[our tutorial](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration) for further information.
+
+If you are unsure about what a part is, check [our explanation on parts](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration/framework_donkeycar_parts).
+
 ### Pytorch part (description)
 
 There are 3 classes defined in the Pytorch Part. 

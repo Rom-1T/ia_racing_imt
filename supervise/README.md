@@ -1,7 +1,7 @@
 # Apprentissage supervisé
 
 ## Récupération des données de la course
-Lors de la course, la voiture enregistre l'image, la direction et la vitesse a une fréquence définie dans des répertoires nommés tubs, stocké dans le répertoire ```data``` de la voiture.
+Lors de la course, la voiture enregistre l'image, la direction et la vitesse a une fréquence définie dans des répertoires nommés tubs ([découvrir ce qu'est un tub](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration/mycar)), stocké dans le répertoire ```data``` de la voiture.
 
 Pour faciliter la récupération des données de la dernière course, nous conseillons de créer un tub par exécution de la voiture (sinon toutes les données sont stockées dans le même tub et il devient difficile de faire le tri entre les anciennes et les nouvelles données). Pour cela, dans le fichier ```cars/mycar/myconfig.py```, il suffit de décommenter la constante ```AUTO_CREATE_NEW_TUB``` et de la passer à True.
 
@@ -91,19 +91,23 @@ En outre, dans chaque répertoire on retrouvera les ```catalog_X.catalog```, ```
 ## Utiliser les modèles du framework donkeycar
 
 ### Création de nouveaux modèles
-Le Framework intègre plusieurs modèles de base implémentés avec Keras (nous déconseillons Pytorch qui n’est pas toujours compatible avec Raspberry Pi OS).
+Le framework donkeycar intègre plusieurs modèles de base implémentés avec Keras (nous déconseillons Pytorch qui n’est pas toujours compatible avec Raspberry Pi OS (nous avons quand même créé un [tutoriel d'installation sur Raspberry Pi](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration))).
 
 Pour ajouter un nouveau modèle, la procédure est expliquée sur la [documentation du framework](https://docs.donkeycar.com/dev_guide/model/).
 
+Pour en savoir plus sur le framework et le fonctionnement des parts, [lire notre section dédiée](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration/framework_donkeycar_parts).
 
 ### Lancer un entraînement
+
+> __Note__ : pour cette partie, il est vivement recommandé d'avoir un bon ordinateur ou qui a une carte graphique avec CUDA installé. Pour installer CUDA, [consulter nos explications et conseils](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration). Le temps d'exécution peut ainsi passer de quelques heures à quelques minutes.
+
 Pour lancer un entraînement, il suffit de taper les commandes suivantes de se rendre dans le répertoire correspondant à la voiture qui contient les données.
 
 ```
 $ cd ~/ia_racing/mysim/
 ```
 
-Pour choisir le type de modèle qu'on souhaite entraîner, il faut modifier le fichier ```myconfig.py``` en tapant la commande suivante et modifier la constante ```DEFAULT_MODEL_TYPE```. Il peut être nécessaire de modifier les constantes ```IMAGE_W```, ```IMAGE_H``` et ```IMAGE_DEPTH``` si les images ont été préprocessées. D'autres paramètres peuvent influer sur l'entraînement comme la taille des lots d'images (```BATCH_SIZE```), le learning rate (```LEARNING_RATE```) et le nombre d'epochs (```MAX_EPOCHS```).
+Pour choisir le type de modèle qu'on souhaite entraîner, il faut modifier le fichier ```myconfig.py``` en tapant la commande suivante et modifier la constante ```DEFAULT_MODEL_TYPE``` (pour comprendre l'intérêt du fichier ```myconfig.py```, [voir ce document](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration/mycar)). Il peut être nécessaire de modifier les constantes ```IMAGE_W```, ```IMAGE_H``` et ```IMAGE_DEPTH``` si les images ont été préprocessées. D'autres paramètres peuvent influer sur l'entraînement comme la taille des lots d'images (```BATCH_SIZE```), le learning rate (```LEARNING_RATE```) et le nombre d'epochs (```MAX_EPOCHS```).
 
 > __Note__ : le nombre d'epochs renseigné correspond au nombre maximum d'epochs qui pourront être utilisées pour l'entraînement car, par défaut, lorsque la valeur de la fonction de coût n'évolue plus, l'entraînement s'arrête (cela peut être désactivé en passant la constante ```USE_EARLY_STOP``` à False). Cet arrêt est intéressant pour éviter le surapprentissage.
 
@@ -175,7 +179,7 @@ Ensuite, avec le navigateur de son ordinateur, il faut se rendre à l'adresse *[
 
 ## Créer sa part et son modèle
 
-Nous avons essayé de créer notre propre modèle et notre propre part avant d'utiliser l'intégration des modèles au framework. Même si cela s'est conclu par un échec (modèle peu concluant au niveau de la direction), cela est un bon exercice pour prendre en main les problèmes d'apprentissage.
+Nous avons essayé de créer notre propre modèle et notre propre part avant d'utiliser les scripts déjà intégrés au framework donkeycar. Même si cela s'est conclu par un échec (modèle peu concluant au niveau de la direction), cela est un bon exercice pour prendre en main les problèmes d'apprentissage. Pour voir comment nous avons transformé nos scripts en parts pour implémenter le pilote automatique, [voir ce document](https://github.com/Rom-1T/ia_racing_imt/blob/main/integration/framework_donkeycar_parts/parts).
 
 ### Constitution du dataset
 Avant de concevoir son modèle et l'entrainer, il faut constituer un dataset.

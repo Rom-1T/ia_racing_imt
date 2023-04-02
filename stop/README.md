@@ -1,7 +1,7 @@
 # Lot Stop
 
 ## Principe
-Le principe de ce lot est d'être capable de détecter la ligne de stop lors d'une course. Chaque franchissement de la ligne de stop pourra être considéré comme l'achèvement d'un tour. De fait, si l'on sait détecter la ligne de stop, on sait compter le nombre de tours effectué par la voiture. Le présent lot se concentre uniquement sur la détection de la ligne de stop.
+Le principe de ce lot est d'être capable de détecter la ligne de stop lors d'une course. Chaque franchissement de la ligne de stop pourra être considéré comme l'achèvement d'un tour. De fait, si l'on sait détecter la ligne de stop, on sait compter le nombre de tours effectués par la voiture. Le présent lot se concentre uniquement sur la détection de la ligne de stop.
 
 2 méthodes ont été apportées :
 
@@ -13,19 +13,21 @@ Le principe de ce lot est d'être capable de détecter la ligne de stop lors d'u
 Quelque soit la méthode utilisée, il a fallu constituer un dataset d'images de lignes. La collecte d'images n'est pas le plus compliqué en soi, ni le plus long.
 En revanche, labelliser les images était plus fastidieux. Pour cette raison, cette section détaille les scripts que nous avons utilisés.
 
-L'ensemble des fichiers pour faciliter la labellisation des images se trouve dans le répertoire ```script_labeling```.
+L'ensemble des fichiers pour faciliter la labellisation des images se trouve dans le répertoire [```script_labeling```](https://github.com/Rom-1T/ia_racing_imt/tree/main/stop/script_labeling).
 
 > __Warning__ : pour équilibrer l'apprentissage, il faut que les datasets soient équilibrés, c'est-à-dire qu'il y ait dans chaque dataset autant d'images sans ligne que d'images avec ligne de stop.
 
 ## Stop par Intelligence Artificielle
 
 ### Formalisation
-La formalisation du problème d'optimisation est explicitée dans le document ```Formalisation.pdf```.
+La formalisation du problème d'optimisation est explicitée dans le document [```Formalisation.pdf```](https://github.com/Rom-1T/ia_racing_imt/blob/main/stop/Formalisation.pdf).
 
 ### ```stop-ia.py```
 
 #### Prérequis
 Installation de PyTorch.
+
+[Pour installer PyTorch sur la voiture.](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration)
 
 #### Données d'entrée
 Les données d'entrée sont à renseigner à travers la définition de constantes :
@@ -99,6 +101,8 @@ c.set_optimizer(optim.SGD(c.model.parameters(), lr=0.001, momentum=0.9))
 c.scheduler = lr_scheduler.StepLR(c.optimizer, step_size=7, gamma=0.1)
 ```
 
+> __Note__ : la fonction de coût utilisée est la [BinaryCrossEntropy](https://pytorch.org/docs/stable/generated/torch.nn.BCELoss.html).
+
 On ajoute des datasets en leur définissant des noms.
 
 ```python
@@ -166,6 +170,11 @@ Installation de OpenCV.
 #### Données d'entrée
 Les données d'entrée sont à renseigner à travers la définition de constantes :
 
+- ```lower``` : Couleur "basse" de la plage de couleurs 
+- ```upper``` : Couleur "haute" de la plage de couleurs
+
+> __Note__ : La recherche des bornes de couleurs peut être simplifiée grâce à l'utilisation de l'outil [```settings/find_hsv_bounds.py```](https://github.com/Rom-1T/ia_racing_imt/tree/main/stop/settings).
+
 - ```IMG_DIR_SANS``` : Répertoire contenant des images à tester sans ligne de stop
 - ```IMG_DIR_AVEC``` : Répertoire contenant des images à tester avec ligne de stop
 - ```IMWRITE_DIR``` : Répertoire où enregistrer les détections (doit contenir un sous-répertoire *class_0* et un sous-répertoire *class_1* lui-même ayant un sous-répertoire *ignore*)
@@ -185,7 +194,7 @@ Si on réalise un étalonnage avant la course (donc dans les conditions de lumin
 
 #### Fonctionnement
 
-On définit les bornes hautes et basses du jaune. Le fichier ```settings/find_hsv_bounds.py``` peut grandement aider.
+On définit les bornes hautes et basses du jaune. Le fichier [```settings/find_hsv_bounds.py```](https://github.com/Rom-1T/ia_racing_imt/tree/main/stop/settings) peut grandement aider.
 
 ```python
 lower = np.array([30, 53, 74])
