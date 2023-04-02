@@ -29,8 +29,13 @@ En addition, nous avons inclus 2 répertoires supplémentaires :
 - integration : comment monter la voiture, intégrer le framework donkeycar, ajouter de nouvelles parts, lancer la voiture…
 
 *
+
 |
+
 |-- start
+
      | ---- [Structure du code du lot START](https://github.com/Rom-1T/ia_racing_imt/blob/main/start/README.md)
+
 |
+
 |
