@@ -11,6 +11,7 @@ This part can be done on the host pc. See Usage for the rapsberry pi integration
 //Conda install
 conda install -c conda-forge opencv
 ```
+```
 //pip install
 pip install opencv-python
 ```
