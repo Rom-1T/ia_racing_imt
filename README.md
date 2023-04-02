@@ -7,22 +7,13 @@ The calibration of the camera lens is needed only when you intend to use a model
 This part can be done on the host pc. See Usage for the rapsberry pi integration.
 
 #### Install library
-
-{% tabs %}
-{% tab title="Conda" %}
 ```
 //Conda install
 conda install -c conda-forge opencv
 ```
-{% endtab %}
-
-{% tab title="Pip" %}
-```
 //pip install
 pip install opencv-python
 ```
-{% endtab %}
-{% endtabs %}
 
 #### Print checkerboard
 
