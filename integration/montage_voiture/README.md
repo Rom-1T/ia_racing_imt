@@ -68,11 +68,9 @@ Identification des fonctions de la voiture
 - Lorsque le coupe circuit est éteint, il met en contact les bornes CO et NC, donc il faut bien brancher le fil vers le moteur sur la branche NC si l’on veut pouvoir utiliser la voiture sans alimentation du commutateur (ex : le temps d’obtenir une pile ou le porte-pile).
 - Même si la diode de l’interrupteur s’allume avec l’alimentation de la voiture, cela ne suffit pas à l’ouvrir et le fermer, il faut donc bien du 12V en entrée (pour cela il faut soit une pile soit un amplificateur de puissance)
 
-
-
 ## Ajout d'un controlleur - manette
 
-Il est possible de connecter plusieurs types de manette de jeu à la voiture. Une [section de la documentation](https://docs.donkeycar.com/parts/controllers/) est dédiée à ce sujet. Lors de ce projet, nous  avons connecté une manette de PS4 à la voiture.
+Il est possible de connecter plusieurs types de manette de jeu à la voiture. Une [section de la documentation](https://docs.donkeycar.com/parts/controllers/) est dédiée à ce sujet. Lors de ce projet, nous  avons connecté une manette de PS4 à la voiture. Pour utiliser la manette, il faudra rajouter l'argument ```--js``` à la commande pour lancer la voiture ([voir exécution de la voiture](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration)).
 
 ##### Avantages à connecter sa propre manette :
 - Meilleur contrôle sur les joysticks (notamment pour la vitesse)
@@ -102,5 +100,5 @@ Il est alors possible de refaire la connexion à la manette.
 
 ## Voir ensuite
 
-- Installer l'OS de la Raspberry
+- [Installer l'OS de la Raspberry](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration)
 

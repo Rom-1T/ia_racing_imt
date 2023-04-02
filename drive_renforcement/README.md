@@ -301,3 +301,8 @@ def get_image_augmenter() -> iaa.Sequential:
 ```
 In both cases, make sure that the data fits the expectations of both the autoencoder (RGB format) and the restriction imposed by the autoencoder.py script:
 ` assert observation.shape == self.input_dimension, f"{observation.shape} != {self.input_dimension}" `). 
+
+
+## Additionnal link
+
+To switch from a simulator training environment to real world conditions with the donkeycar, you have to [calibrate the camera to avoid the fish-eye effect it has](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration/calibration_camera), so the training environment and the real one can look the same, at least for the horizon.

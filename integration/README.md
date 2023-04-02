@@ -121,9 +121,3 @@ Il faudra également installé tous les pilotes et bibliothèques décrits dans 
 Si certaines bibliothèques ne sont pas prises en compte, il faudra ajouter leur chemin dans les variables du système (Panneau de configuration - Modifier les variables d'environnement  - Variables d’environnement) comme décrit dans le guide.
 
 Pour savoir si l’installation de CUDA est effective il faudra prêter attention aux erreurs éventuelles affichées lors du lancement d’un entraînement et surveiller l’utilisation du GPU. Certaines bibliothèques supplémentaires peuvent être nécessaires comme la bibliothèque _zlib_.
-
-#### Create the parts
-
-#### Integrate the model
-
-#### Performance issues

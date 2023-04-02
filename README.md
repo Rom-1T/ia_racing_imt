@@ -104,13 +104,15 @@ En addition, nous avons inclus 2 répertoires supplémentaires :
         - [Ajuster le simulateur](https://github.com/Rom-1T/ia_racing_imt/tree/main/simulateur) et [ajouter un circuit](https://github.com/Rom-1T/ia_racing_imt/tree/main/drive_renforcement)
         - [Intégrer et utiliser le framework RL-Baseline3-Zoo framework](https://github.com/Rom-1T/ia_racing_imt/tree/main/drive_renforcement)
         - [Installer Pytorch sur la voiture](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration)
+        - [Retirer l'effet fish-eye de la caméra](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration/calibration_camera)
 - Intégration
     - [Monter la voiture + coupe-circuit](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration/montage_voiture)
     - [Installer l'OS](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration)
     - Donkeycar
         - [Installer Donkeycar](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration)
         - [Explication du fonctionnement des parts](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration/framework_donkeycar_parts)
-        - [Intégrer nos parts](https://github.com/Rom-1T/ia_racing_imt/blob/main/integration/framework_donkeycar_parts/parts)
-        - [Mettre en place du preprocessing](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration/preprocessing) et l'[intégrer](https://github.com/Rom-1T/ia_racing_imt/blob/main/integration/framework_donkeycar_parts/parts)
         - [Créer et paramétrer sa voiture](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration/mycar)
+        - [Mettre en place du preprocessing](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration/preprocessing) et l'[intégrer](https://github.com/Rom-1T/ia_racing_imt/blob/main/integration/framework_donkeycar_parts/parts)
+        - [Intégrer nos parts](https://github.com/Rom-1T/ia_racing_imt/blob/main/integration/framework_donkeycar_parts/parts)
+        - [Ajouter une manette](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration/montage_voiture)
 

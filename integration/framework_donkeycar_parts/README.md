@@ -54,8 +54,6 @@ if cfg.PREPROCESSING:
 ```
 > Dans cet exemple, Preprocessing est une part qui sert à traiter les images (elle n'existe pas de base). Elle prend en entrée ('inputs') l'image de la caméra ('cam/image\_array') et ressort ('outputs') une image image rognée ('prepro/image\_cropped') et une image traitée ('prepro/image_lines').
 
-
-
 Ensuite, les parts seront appelées à tour de rôle dans une boucle (définie par la méthode start de vehicle.py).
 
 ```python
@@ -67,7 +65,7 @@ V.start(rate_hz=cfg.DRIVE_LOOP_HZ, max_loop_count=cfg.MAX_LOOP)
 
 #### Structure d'une part
 Toutes les parts sont structurées de la même manière.
-A minima, une part est structurée comme une classe ayant un constructeur et une méthode run. Lorsqu’une part est exécutée, la méthode run de cette part est appelée. De fait, les paramètres de la méthode run doivent être cohérents en nombre avec les inputs de la part dans manage.py. De la même manière, les valeurs de retour de run doivent être au même nombre que les outputs définis pour la part dans le manage.py.
+A minima, une part est structurée comme une classe ayant un constructeur et une méthode *run*. Lorsqu’une part est exécutée, la méthode *run* de cette part est appelée. De fait, les paramètres de la méthode *run* doivent être cohérents en nombre avec les inputs de la part dans ```manage.py``` ([voir l'utilisation de ```manage.py```](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration/mycar)). De la même manière, les valeurs de retour de *run* doivent être au même nombre que les outputs définis pour la part dans le ```manage.py```.
 
 ```python
 class PartName:
@@ -78,7 +76,7 @@ class PartName:
 		pass
 ```
 
-Pour aller plus loin, les parts peuvent être exécutées sur un autre thread. Dans ce cas, il faut rajouter une méthode run_threaded qui est exécutée dans la méthode run puis rajouter une méthode update.
+Pour aller plus loin, les parts peuvent être exécutées sur un autre thread. Dans ce cas, il faut rajouter une méthode *run_threaded* qui est exécutée dans la méthode *run* puis rajouter une méthode *update*.
 
 ```python
 class PartName:
@@ -94,6 +92,8 @@ class PartName:
 	def update(self):
 		pass
 ```
+
+Pour des exemples de parts, [consulter le répertoire d'intégration de nos parts](https://github.com/Rom-1T/ia_racing_imt/blob/main/integration/framework_donkeycar_parts/parts).
 
 ## Place du framework vis-à-vis du matériel
 

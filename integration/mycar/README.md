@@ -101,6 +101,17 @@ V.start(rate_hz=cfg.DRIVE_LOOP_HZ, max_loop_count=cfg.MAX_LOOP)
 
 ![](../../README_imgs/parts-exec.png)
 
+## Exécuter la voiture
+
+Pour lancer la voiture, il suffit de se rendre dans le répertoire de la voiture puis de taper la commande suivante dans le terminal.
+
+```
+python manage.py drive
+```
+
+On peut rajouter ```--js``` si on souhaite contrôler la voiture avec une manette (voir l'[ajout d'un controlleur](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration/montage_voiture)).
+
+On peut ensuite suivre l'évolution du véhicule en se rendant avec un navigateur à l'adresse ```localhost:8887/drive``` (si on est en local) ou ```imtaracing.local:8887``` (sinon, ajuster le ```imtaracing``` par le nom de la Raspberry défini lors de l'[installation de l'OS](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration)).
 
 ## Vue d'ensemble de la voiture (software + hardware)
 

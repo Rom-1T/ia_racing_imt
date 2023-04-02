@@ -9,6 +9,13 @@ Ce répertoire contient les parts que nous avons créées et/ou modifiées :
 5. SupervisedDrive
 6. Web Controllers
 
+## Prérequis
+
+Pour bien comprendre l'implémentation des parts, il faut :
+
+- [Comprendre comment fonctionne une part](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration/framework_donkeycar_parts)
+- [Comment s'appelle et se paramètre une part](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration/mycar)
+
 ## 1. IMTA_start
 ### 1.1 Principe
 
@@ -455,9 +462,9 @@ outputs=['user/angle', 'user/throttle', 'user/mode', 'recording', 'web/buttons',
 
 ### 3.1. Principe
 
-Le preprocessing est réalisé par une part créée maison. Elle doit donc être intégrée au framework et dans les parts exécutées par la voiture.
+Le preprocessing ([voir notre présentation détaillée de plusieurs preprocessings](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration/preprocessing)) est réalisé par une part créée maison. Elle doit donc être intégrée au framework et dans les parts exécutées par la voiture.
 
-Lors du développement du preprocessing (de l'équipe supervisée), le choix a été fait de conserver l'image brute de la caméra intacte dans le « channel » ```cam/image_array```. Un autre « channel » ```prepro/image_cropped``` a été créé pour récupérer l'image brute rognée (qui peut servir à la partie stop). Un « channel » ```prepro/image_lines``` a également été créé pour récupérer l'image à l'issue du preprocessing complet. C'est donc ```prepro/image_lines``` qui sera à passer au modèle de conduite supervisée. La création d'un channel propre et le choix du nom du channel est arbitraire et peut être ajusté facilement.
+Lors du développement du preprocessing (de l'équipe supervisée), le choix a été fait de conserver l'image brute de la caméra intacte dans le « channel » ```cam/image_array```. Un autre « channel » ```prepro/image_cropped``` a été créé pour récupérer l'image brute rognée (qui peut servir à la partie stop). Un « channel » ```prepro/image_lines``` a également été créé pour récupérer l'image à l'issue du preprocessing complet. C'est donc ```prepro/image_lines``` qui sera à passer au modèle de conduite supervisée. La création d'un channel propre et le choix du nom du channel est arbitraire et peut être ajusté facilement ([voir fonctionnement de la voiture](https://github.com/Rom-1T/ia_racing_imt/tree/main/integration/mycar)).
 
 La part prend en entrée l'image de la caméra.
 
