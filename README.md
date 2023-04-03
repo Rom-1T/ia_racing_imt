@@ -31,6 +31,8 @@ Comme celui-ci est développé sur le logiciel Unity (disponible sur ce lien : [
 
 Dans ce document seront détaillées les étapes principales pour pouvoir modifier ou ajouter une nouvelle piste ainsi que l’organisation globale du projet, et ce en détaillant les étapes pour qu’elles soient compréhensibles pour quelqu’un qui n’a jamais utilisé ce logiciel.
 
+Vous pouvez retrouver le simulateur que nous avons déjà modifié (pour Linux et Windows) ainsi que le fichier Unity correspondant sur ce lien: [https://drive.google.com/drive/folders/19OqtOpX14KrBbz\_3t7vifHkLdI4yMzXr?usp=sharing](https://drive.google.com/drive/folders/19OqtOpX14KrBbz\_3t7vifHkLdI4yMzXr?usp=sharing)
+
 ### PRISE EN MAIN <a href="#_toc130232444" id="_toc130232444"></a>
 
 Si vous avez déjà utilisé Unity, vous pouvez sauter cette partie, elle ne fait que préciser certaines bases du logiciel pour ceux qui le découvrent mais je conseille de tout de même regarder un tuto YouTube pour bien connaître comment il s’organise.
