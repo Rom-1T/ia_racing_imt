@@ -8,13 +8,7 @@ Here are the steps to install Raspbian OS Lite on a fresh Raspberry Pi 4B:
 2. Flash the Raspbian OS Lite image onto a microSD card using a tool like Raspberry Pi Imager or Etcher.
 3. Insert the microSD card into the Raspberry Pi 4B and connect the power supply, keyboard, mouse, and monitor.
 4. Wait for the Raspberry Pi to boot up and login using the default username and password. The default username is "pi" and the default password is "raspberry".
-5. Run the following command to update the system and packages:
-
-```sql
-sudo apt-get update && sudo apt-get upgrade
-```
-
-6. Configure the network settings. If you are using a wired connection, you should already be connected to the network. If you are using a wireless connection, you need to configure the network settings using the "wpa\_supplicant.conf" file. :
+5. Configure the network settings. If you are using a wired connection, you should already be connected to the network. If you are using a wireless connection, you need to configure the network settings using the "wpa\_supplicant.conf" file. :
 
 Run the following command to edit the "wpa\_supplicant.conf" file:
 
