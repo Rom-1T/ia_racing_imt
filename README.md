@@ -31,6 +31,9 @@ En addition, nous avons inclus 2 répertoires supplémentaires :
 ```
 *
 |
+|-- Document de passation générale
+|-- Document de passation des liens et accès
+|
 |-- start
      |-- Explication du lot START
      |-- Code du lot START
@@ -86,6 +89,9 @@ En addition, nous avons inclus 2 répertoires supplémentaires :
 
 ### Liens par lots
 
+- Documents de passation écrits :
+    - [Passation générale](IA_Racing-Document-Passation.pdf)
+    - [Passation des accès](IA_Racing-Passation_liens_et_acces.pdf)
 - Lot START
     - [Explication du lot START](https://github.com/Rom-1T/ia_racing_imt/blob/main/start)
     - [Intégration de la part START](https://github.com/Rom-1T/ia_racing_imt/blob/main/integration/framework_donkeycar_parts/parts)
